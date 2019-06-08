@@ -74,8 +74,16 @@ class Territory(object):
                 if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                     self.data = lst_ret[0]
             else:  # test for names
-                pass
-
+                lst_ret = list()
+                for key in self.dic_iso3166.keys():
+                    for namefield in  [tok for tok in self.dic_iso3166[key] if tok[:5].lower() == 'name_']:
+                        str_name = self.dic_iso3166[key][namefield]
+                        pos = str_name.find(clue)
+                        if pos >= 0:
+                            lst_ret.append(self.dic_iso3166[key])
+                            break  # Only ad a country (teritory) once
+                if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
+                    self.data = lst_ret[0]
 
         if isinstance(clue, int):  # Clue is integer type
             lst_ret = list()
