@@ -43,20 +43,31 @@ class Territory(object):
     #print(dic_iso3166)
 
 
-    def __init__(self, clue=""):
+    def __init__(self, clue="", safe=True):
         self.data = dict()
-        self.guess(clue)
+        self.guess(clue, safe)
 
-    def guess(self, clue):
-        # guess alpha code
-        if len(clue) == 2:  # It's an Alpha-2 code
-            if clue in self.dic_iso3166.keys():
-                self.data = self.dic_iso3166[clue]
-        try:
-            num_clue = int(clue)
-        except ValueError:
-            num_clue = None
-        if num_clue:
+    def guess(self, clue, safe):
+        """Try to guess a country (or teritory) from a clue
+        Generally try the standard ISO 3166 parameters first,
+        then try any extended parameter. """
+
+        self.data = dict()  # Default value. If no hits are found, then no info in .data
+
+        # Standard ISO 3166 parameter search
+        if isinstance(clue, (bytes, str)):
+            if len(clue) == 2:  # It's likely an Alpha-2 code
+                clue = clue.upper()  # Conveniently ignores case of uder input
+                if clue in self.dic_iso3166.keys():
+                    self.data = self.dic_iso3166[clue]
+            elif len(clue) == 3:  # It's likely an Alpha-3 code
+                lst_ret = list()
+                for key in self.dic_iso3166.keys():
+                    if 'alpha_3' in self.dic_iso3166[key].keys() and self.dic_iso3166[key]['alpha_3'] == clue.upper():
+                        lst_ret.append(self.dic_iso3166[key])
+                if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
+                    self.data = lst_ret[0]
+        elif isinstance(clue, int):  # input is integer
             pass
 
     def keys(self):
