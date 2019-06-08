@@ -1,7 +1,7 @@
 
 import ec_ext_iso3166
 
-terr = ec_ext_iso3166.Territory('Republic', False)
+terr = ec_ext_iso3166.Territory('dEnMa')
 
 print(terr)
 print(terr.keys())
