@@ -55,20 +55,39 @@ class Territory(object):
         self.data = dict()  # Default value. If no hits are found, then no info in .data
 
         # Standard ISO 3166 parameter search
-        if isinstance(clue, (bytes, str)):
-            if len(clue) == 2:  # It's likely an Alpha-2 code
+        if isinstance(clue, (bytes, str)):  # Clue is string type
+            try:
+                num_clue = int(clue)  # test if it's a number
+            except ValueError:
+                num_clue = None
+            if num_clue:
+                clue = num_clue  # if string holds a number, pass it to the number section
+            elif len(clue) == 2:  # It's assumed to be an Alpha-2 code
                 clue = clue.upper()  # Conveniently ignores case of uder input
                 if clue in self.dic_iso3166.keys():
                     self.data = self.dic_iso3166[clue]
-            elif len(clue) == 3:  # It's likely an Alpha-3 code
+            elif len(clue) == 3:  # It's assumed to be an Alpha-3 code
                 lst_ret = list()
                 for key in self.dic_iso3166.keys():
                     if 'alpha_3' in self.dic_iso3166[key].keys() and self.dic_iso3166[key]['alpha_3'] == clue.upper():
                         lst_ret.append(self.dic_iso3166[key])
                 if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                     self.data = lst_ret[0]
-        elif isinstance(clue, int):  # input is integer
-            pass
+            else:  # test for names
+                pass
+
+
+        if isinstance(clue, int):  # Clue is integer type
+            lst_ret = list()
+            for key in self.dic_iso3166.keys():
+                if 'numeric_3' in self.dic_iso3166[key].keys():
+                    try:
+                        if int(self.dic_iso3166[key]['numeric_3']) == clue:
+                            lst_ret.append(self.dic_iso3166[key])
+                    except ValueError:
+                        pass
+            if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
+                self.data = lst_ret[0]
 
     def keys(self):
         return [tok for tok in self.data.keys()]
