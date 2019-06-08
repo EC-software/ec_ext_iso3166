@@ -1,0 +1,15 @@
+# MID (Maritime Identification Digits)
+# From Wikipedia, the free encyclopedia (June 2019)
+#
+# Maritime identification digits are used by radio communication facilities to identify their home country or base area in Digital Selective Calling (DSC), Automatic Transmitter Identification System (ATIS), and Automatic Identification System (AIS) messages as part of their Maritime Mobile Service Identities.
+# The International Telecommunication Union facilitates the assignment of MIDs to countries.
+# Note that not all countries have MIDs; those without are typically landlocked, with no access to international waters.
+
+# Sorting MID assignments in numerical order reveals a regional structure, with the first digit:
+#     2 assigned to Europe,
+#     3 to North America and the Caribbean Sea,
+#     4 to Asia (not the southeast),
+#     5 to the Pacific and Eastern Indian Oceans and Southeast Asia,
+#     6 to Africa, the Atlantic and Western Indian Oceans, and
+#     7 to South America.
+
