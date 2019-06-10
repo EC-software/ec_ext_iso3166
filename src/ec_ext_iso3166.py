@@ -10,7 +10,7 @@ e.g. the countries TLD. Se the tld.csv file for details.
 This makes the TLD a fully integrated attribute on each country.
 
 You can easily make your own extensions, by writing new .csv files,
-only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-3
+only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 """
 
 
@@ -20,6 +20,7 @@ class Territory(object):
     Typically a country, but can be independent territories
     or subdivision of countries territories. """
 
+    # Begin Class variables and functions
 
     def add_ext_key(dic_in, lst_hdr, lst_new):
         """ lst_hdr and the keys and lst_new are the values.
@@ -32,7 +33,7 @@ class Territory(object):
         key_in = lst_hdr[1].strip()
         val_in = lst_new[1].strip()
         if all([len(tok) > 0 for tok in [key_on, val_on, key_in, val_in]]):
-            ##print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
+            # print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
             for key_te in dic_in.keys():  # Loop the Territories
                 for key_old in dic_in[key_te].keys():
                     if key_old == key_on:
@@ -95,6 +96,71 @@ class Territory(object):
     #print(dic_iso3166)
 
 
+    def compare(self, val_m, itm, safe):
+        """ Compare a specific set of values.
+        So far assume all in string XXX This may not turn out to be a true assumption XXX
+        Comparison is Case-Insensitive. """
+        if (val_m == None or itm == None):  # Some Territories may lack a certain key
+            return False
+        if isinstance(val_m, (int, float)):
+            print("Can't compare Numbers ...")
+            return False
+        if val_m.lower() == itm.lower():
+            return True
+        else:
+            if not safe:  # Allowing partly match
+                if itm.lower().find(val_m.lower()) >= 0:
+                    return True
+        return False
+
+    def kv_match_terr(self, key_f, val_m, dic_ter, safe=True):
+        """ Check if a key-value pair match the territory.
+        Return True on match, else False. """
+
+        bol_match = False  # Assume no hit, until a hit is found
+        if isinstance(dic_ter.get(key_f), list):
+            for itm in dic_ter.get(key_f):
+                if not bol_match:  # No need to go on if we all ready have a match
+                    bol_match = self.compare(val_m, itm, safe)
+        else:
+            bol_match = self.compare(val_m, dic_ter.get(key_f), safe)
+        return bol_match
+
+    def kv_any_match_terr(self, val_m, dic_ter, safe=True):
+        """ Check if a value match any key on the territory.
+        Return True on match, else False. """
+
+        bol_match = False  # Assume no hit, until a hit is found
+        for key_t in dic_ter.keys():
+            if not bol_match:  # No need to go on if we all ready have a match
+                if isinstance(dic_ter.get(key_t), list):
+                    for itm in dic_ter.get(key_t):
+                        if not bol_match:  # No need to go on if we all ready have a match
+                            bol_match = self.compare(val_m, itm, safe)
+                else:
+                    bol_match = self.compare(val_m, dic_ter.get(key_t), safe)
+        return bol_match
+
+    def find_all_in_any(self, val_f, safe=True):
+        """ Find all territories that have val_f in any of it's keys.
+        Return an (empty) list. """
+        lst_ret = list()
+        for key_te in self.dic_iso3166.keys():
+            if self.kv_any_match_terr(val_f, self.dic_iso3166[key_te], safe):
+                lst_ret.append(self.dic_iso3166[key_te])
+        return lst_ret
+
+    def find_all_by_key(self, key_f, val_f, safe=True):
+        """ Find all territories that have key_f == val_f
+        Return an (empty) list. """
+        lst_ret = list()
+        for key_te in self.dic_iso3166.keys():
+            if self.kv_match_terr(key_f, val_f, self.dic_iso3166[key_te], safe):
+                lst_ret.append(self.dic_iso3166[key_te])
+        return lst_ret
+
+    # End Class variables and functions
+
 
     def __init__(self, clue="", safe=True):
         self.data = dict()
@@ -149,15 +215,21 @@ class Territory(object):
             if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                 self.data = lst_ret[0]
 
+
     def keys(self):
+        """ Return list of all keys available on this territory. """
         return [tok for tok in self.data.keys()]
 
+
     def get(self, key):
+        """ Return the Value that matches the given key.
+        Return None if key not found. """
         if key in self.data.keys():
             return self.data[key]
         else:
             return None
 
-    def getall(self):
-        return self.data
 
+    def get_all(self):
+        """ Return the entire territory dictionary structure """
+        return self.data
