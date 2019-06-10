@@ -13,17 +13,29 @@ You can easily make your own extensions, by writing new .csv files,
 only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 """
 
+# ToDo: Clean up the many searchers, what's supposed to be the difference between guess() and find*()
+#   Idea: All will: Always search ISO 3166 first, but
+#   guess():
+#       - Never return multiple hits (that would not be a guess)
+#   locate():
+#       - First and foremost, tries to be compatible with https://pypi.org/project/pycountry/
+#   find():
+#       - Allow for multiple returns, somehow...
+#       - Allow search to target specific keys, e.g. 'capital' = 'Rome'
+# ToDo: Combine find_all_by_key() and _find_all_in_any() to one function
+# ToDo: Make search by number (as int) work
+# ToDo: Write Test Class :-)
 
 class Territory(object):
 
     """ A Territory.
     Typically a country, but can be independent territories
-    or subdivision of countries territories. """
+    or subdivision of countries or territories. """
 
     # Begin Class variables and functions
 
     def add_ext_key(dic_in, lst_hdr, lst_new):
-        """ lst_hdr and the keys and lst_new are the values.
+        """ lst_hdr and the keys, and lst_new are the values.
         In the dic_iso3166, find the entry with key_on == val_on.
         Add to this entry a new key key_new, with value val_new.
         If key_new all-ready exist, make it a list and append the new value.
@@ -93,12 +105,12 @@ class Territory(object):
                                 dic_iso3166 = add_ext_key(dic_iso3166, lst_head, lst_in)
                             num_cnt += 1
 
-    #print(dic_iso3166)
+    # End of functions for reading in data...
 
 
-    def compare(self, val_m, itm, safe):
+    def _compare(self, val_m, itm, safe):
         """ Compare a specific set of values.
-        So far assume all in string XXX This may not turn out to be a true assumption XXX
+        So far assume all in string XXX This may be a wrong assumption XXX
         Comparison is Case-Insensitive. """
         if (val_m == None or itm == None):  # Some Territories may lack a certain key
             return False
@@ -113,7 +125,7 @@ class Territory(object):
                     return True
         return False
 
-    def kv_match_terr(self, key_f, val_m, dic_ter, safe=True):
+    def _kv_match_terr(self, key_f, val_m, dic_ter, safe=True):
         """ Check if a key-value pair match the territory.
         Return True on match, else False. """
 
@@ -121,12 +133,12 @@ class Territory(object):
         if isinstance(dic_ter.get(key_f), list):
             for itm in dic_ter.get(key_f):
                 if not bol_match:  # No need to go on if we all ready have a match
-                    bol_match = self.compare(val_m, itm, safe)
+                    bol_match = self._compare(val_m, itm, safe)
         else:
-            bol_match = self.compare(val_m, dic_ter.get(key_f), safe)
+            bol_match = self._compare(val_m, dic_ter.get(key_f), safe)
         return bol_match
 
-    def kv_any_match_terr(self, val_m, dic_ter, safe=True):
+    def _kv_any_match_terr(self, val_m, dic_ter, safe=True):
         """ Check if a value match any key on the territory.
         Return True on match, else False. """
 
@@ -136,26 +148,28 @@ class Territory(object):
                 if isinstance(dic_ter.get(key_t), list):
                     for itm in dic_ter.get(key_t):
                         if not bol_match:  # No need to go on if we all ready have a match
-                            bol_match = self.compare(val_m, itm, safe)
+                            bol_match = self._compare(val_m, itm, safe)
                 else:
-                    bol_match = self.compare(val_m, dic_ter.get(key_t), safe)
+                    bol_match = self._compare(val_m, dic_ter.get(key_t), safe)
         return bol_match
 
-    def find_all_in_any(self, val_f, safe=True):
+    # XXX ToDo: combine find_all_by_key and _find_all_in_any to one function
+    def _find_all_in_any(self, val_f, safe=True):
         """ Find all territories that have val_f in any of it's keys.
         Return an (empty) list. """
         lst_ret = list()
         for key_te in self.dic_iso3166.keys():
-            if self.kv_any_match_terr(val_f, self.dic_iso3166[key_te], safe):
+            if self._kv_any_match_terr(val_f, self.dic_iso3166[key_te], safe):
                 lst_ret.append(self.dic_iso3166[key_te])
         return lst_ret
 
-    def find_all_by_key(self, key_f, val_f, safe=True):
+    # XXX ToDo: combine find_all_by_key and _find_all_in_any to one function
+    def _find_all_by_key(self, key_f, val_f, safe=True):
         """ Find all territories that have key_f == val_f
         Return an (empty) list. """
         lst_ret = list()
         for key_te in self.dic_iso3166.keys():
-            if self.kv_match_terr(key_f, val_f, self.dic_iso3166[key_te], safe):
+            if self._kv_match_terr(key_f, val_f, self.dic_iso3166[key_te], safe):
                 lst_ret.append(self.dic_iso3166[key_te])
         return lst_ret
 
@@ -167,10 +181,15 @@ class Territory(object):
         self.guess(clue, safe)
 
 
-    def guess(self, clue, safe):
+    def guess(self, clue, safe=True):
         """Try to guess a country (or teritory) from a clue
         Generally try the standard ISO 3166 parameters first,
-        then try any extended parameter. """
+        then try any extended parameter.
+        The found Territory will be set as self.data, and additionally returned.
+        :clue: str
+        :safe: bool. Only important in case of multi-hit. Safe return nothing, Un-safe returns 1'st hit.
+        :rtype: dict
+        :return: self.data """
 
         self.data = dict()  # Default value. If no hits are found, then no info in .data
 
@@ -188,18 +207,18 @@ class Territory(object):
                     self.data = self.dic_iso3166[clue]
             elif len(clue) == 3:  # It's assumed to be an Alpha-3 code
                 lst_ret = list()
-                for key in self.dic_iso3166.keys():
+                for key in self.dic_iso3166.keys():  # ToDo: This can be shortened...
                     if 'alpha_3' in self.dic_iso3166[key].keys() and self.dic_iso3166[key]['alpha_3'] == clue.upper():
                         lst_ret.append(self.dic_iso3166[key])
                 if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                     self.data = lst_ret[0]
-            else:  # test for names
+            else:  # test for names  ToDo: Make sure we check official ISO 3166 names first!
                 lst_ret = list()
                 for key in self.dic_iso3166.keys():
                     for namefield in  [tok for tok in self.dic_iso3166[key] if tok[:5].lower() == 'name_']:
                         if self.dic_iso3166[key][namefield].lower().find(clue.lower()) >= 0:
                             lst_ret.append(self.dic_iso3166[key])
-                            break  # Only ad a country (teritory) once
+                            break  # Only ad a country (territory) once
                 if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                     self.data = lst_ret[0]
 
@@ -214,6 +233,8 @@ class Territory(object):
                         pass
             if len(lst_ret) > 0 and (len(lst_ret) == 1 or not safe):
                 self.data = lst_ret[0]
+
+        return self.data
 
 
     def keys(self):
@@ -233,3 +254,19 @@ class Territory(object):
     def get_all(self):
         """ Return the entire territory dictionary structure """
         return self.data
+
+
+    def find(self, clue):
+        """ Maybe this should be different from lookup, e.g. more parameters like safe, multi-returns, etc."""
+        return self.lookup(clue)
+
+    def lookup(self, clue=""):
+        """ You can also look up Territories case insensitively without knowing which key the value may match.
+        The funcion lookup is compatible with: pycountry 18.12.8 per the description abowe. <https://pypi.org/project/pycountry/>
+        ToDo: Check what pycountry do in case of multi-hits.
+        :return: Territory object, or None if no hit. """
+        ret = self.guess(clue, safe=False)
+        if isinstance(ret, list) and len(ret) > 0:
+            return ret[0]
+        else:
+            return None
