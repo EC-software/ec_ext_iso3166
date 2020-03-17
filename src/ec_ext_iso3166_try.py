@@ -3,9 +3,9 @@ import ec_ext_iso3166
 
 print(" ------ Velcome to test -------------")
 
-terr = ec_ext_iso3166.Territory('Rom')
+terr = ec_ext_iso3166.Territory('Roma')
 
-#print(terr)
+print(f"ter: {terr}")
 #print(terr.keys())
 print(terr.get('name_eng'))
 pprint.pprint(terr.get_all())

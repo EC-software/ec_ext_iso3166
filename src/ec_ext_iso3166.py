@@ -1,9 +1,10 @@
 import os
 
 """ EC Extendable ISO 3166 class
-The basic official ISO 3166 contains 5 fields for each country:
+So far, only iso-3166-1 (country level) is implemented ...
+The basic official ISO 3166-1 contains 5 fields for each country:
 Numeric, Alpha_2, Alpha_3, English_name and French_name
-These are all stored in the default iso3166,csv file.
+These are all stored in the default iso3166-1.csv file.
 
 It's easy to extend this with other fields,
 e.g. the countries TLD. Se the tld.csv file for details.
@@ -26,7 +27,104 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 # ToDo: Make search by number (as int) work
 # ToDo: Write Test Class :-)
 
-class Territory(object):
+
+class Territories:
+
+    """
+
+    """
+    def __init__(self):
+        self._loaddata()
+
+    def _add_ext_key(self, dic_in, lst_hdr, lst_new):
+        """ lst_hdr are the keys, and lst_new are the values.
+        In the dic_iso3166, find the entry with key_on == val_on.
+        Add to this entry a new key key_new, with value val_new.
+        If key_new all-ready exist, make it a list and append the new value.
+        If no entry with key_on == val_on, do nothing. """
+        key_on = lst_hdr[0].strip()
+        val_on = lst_new[0].strip()
+        key_in = lst_hdr[1].strip()
+        val_in = lst_new[1].strip()
+        if all([len(tok) > 0 for tok in [key_on, val_on, key_in, val_in]]):
+            # print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
+            for key_te in dic_in.keys():  # Loop the Territories
+                for key_old in dic_in[key_te].keys():
+                    if key_old == key_on:
+                        if dic_in[key_te][key_old] == val_on:  # This is the territorry to update
+                            terr_upd = dic_in[key_te]
+                            ##print(val_on, ">", terr_upd)
+                            if key_in in terr_upd.keys():  # The 'new' key all-ready exists
+                                if isinstance(terr_upd[key_in], list):  # It's all-ready a list, append.
+                                    if not val_in in terr_upd[key_in]:
+                                        terr_upd[key_in].append(val_in)
+                                else:  # If value is new, make a list
+                                    if val_in != terr_upd[key_in]:
+                                        terr_upd[key_in] = [terr_upd[key_in], val_in]
+                            else:
+                                terr_upd[key_in] = val_in
+                            dic_in[key_te] = terr_upd  # Put the updated territorry back
+                            break  # We can't continue the loop, as we have changed dic_in
+        return dic_in
+
+    def _loaddata(self, str_data_dir='.'):
+        # Read in the basic ISO 3166-1 data from the .csv file
+        str_fn_iso3166 = r"iso3166-1.csv"  # file name for the basic ISO 3166 file
+        sep = ','  # assumed separator in this file
+        dic_iso3166 = dict()
+        with open(str_fn_iso3166, 'r') as fil_iso3166:
+            num_cnt = 0
+            for line in fil_iso3166:
+                #print(line.strip())
+                line = line.split('#')[0].strip()  # Skip all comments, and spaces
+                if len(line) > 0:
+                    lst_in = [tok.strip() for tok in line.split(sep)]
+                    if num_cnt == 0:  # Assumed to be the header
+                        lst_head = lst_in
+                    else:
+                        str_num = lst_in[0]  # Note: We assume the first column to be the Alpha-2 id.
+                        dic_iso3166[str_num] = dict()
+                        for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogenious search for all parameters
+                            dic_iso3166[str_num][lst_head[n]] = lst_in[n]
+                    num_cnt += 1
+        self._data = dic_iso3166
+        print(f"Done reading base iso-3166-1 for {len(self._data)} territories")
+
+        str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # Use this place to look for other .csv files later
+        ##print(f"root_path: {str_root_path}")
+
+        # Read the additional .csv files. NOTE: This is where the EC Extendable comes from !!!
+        for root, dirs, files in os.walk(str_root_path):
+            for name in files:
+                if '.csv' in name and 'iso3166-1.csv' not in name:  # We all ready handled iso3166-1.csv above
+                    print(f" + Extending base iso-3166-1 with: {os.path.join(root, name)}")
+                    num_cnt = 0
+                    with open(os.path.join(root, name), 'r') as fil_ex:
+                        for line in fil_ex:
+                            data = line.split('#', 1)[0]
+                            if ',' in data:
+                                lst_in = [tok.strip() for tok in data.split(',')]
+                                if num_cnt == 0:  # Header line
+                                    lst_head = lst_in
+                                else:
+                                    dic_iso3166 = self._add_ext_key(dic_iso3166, lst_head, lst_in)
+                                num_cnt += 1
+
+        # End of functions for reading in data...
+
+    def get(self, id):
+        """ Return a dictionary with the territory information for territory with alpha-2 = id
+        if id don't exist, then return None. """
+        if id in self._data.keys():
+            return self._data[id]
+        else:
+            return None
+
+    def guess(self, token):
+        for ter in self._data:
+
+
+class xTerritory(object):
 
     """ A Territory.
     Typically a country, but can be independent territories
@@ -35,7 +133,7 @@ class Territory(object):
     # Begin Class variables and functions
 
     def add_ext_key(dic_in, lst_hdr, lst_new):
-        """ lst_hdr and the keys, and lst_new are the values.
+        """ lst_hdr are the keys, and lst_new are the values.
         In the dic_iso3166, find the entry with key_on == val_on.
         Add to this entry a new key key_new, with value val_new.
         If key_new all-ready exist, make it a list and append the new value.
@@ -67,7 +165,7 @@ class Territory(object):
 
 
     # Read in the basic ISO 3166-1 data from the .csv file
-    str_fn_iso3166 = r"iso3166.csv"  # file name for the basic ISO 3166 file
+    str_fn_iso3166 = r"iso3166-1.csv"  # file name for the basic ISO 3166 file
     sep = ','  # assumed separator in this file
     dic_iso3166 = dict()
     with open(str_fn_iso3166, 'r') as fil_iso3166:
@@ -91,7 +189,7 @@ class Territory(object):
     #print(str_root_path)
     for root, dirs, files in os.walk(str_root_path):
         for name in files:
-            if '.csv' in name and not 'iso3166.csv' in name:  # We all ready handled iso3166.csv above
+            if '.csv' in name and not 'iso3166-1.csv' in name:  # We all ready handled iso3166-1.csv above
                 ##print(os.path.join(root, name))
                 num_cnt = 0
                 with open(os.path.join(root, name), 'r') as fil_ex:
@@ -182,7 +280,7 @@ class Territory(object):
 
 
     def guess(self, clue, safe=True):
-        """Try to guess a country (or teritory) from a clue
+        """ Try to guess a country (or territory) from a clue
         Generally try the standard ISO 3166 parameters first,
         then try any extended parameter.
         The found Territory will be set as self.data, and additionally returned.
