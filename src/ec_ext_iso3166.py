@@ -1,5 +1,7 @@
 import os
 
+import pprint
+
 """ EC Extendable ISO 3166 class
 So far, only iso-3166-1 (country level) is implemented ...
 The basic official ISO 3166-1 contains 5 fields for each country:
@@ -120,8 +122,26 @@ class Territories:
         else:
             return None
 
+    def categories(self):
+        """ Return a list of all categories known to the class """
+        set_cat = set()
+        for ter in self._data.keys():
+            set_cat.update(self._data[ter].keys())
+        #print(f"cathegories: {set_cat}")
+        return sorted(set_cat)
+
+    def find(self, token, category=""):
+        """ Allows for multiple returns, therefore always return a list.
+        If no match is found for token it returns an empty list.
+        Allow for
+        """
+
     def guess(self, token):
+        """ So far this is implemented as a .find()
+        that returns the first element in the list, not the whole list.
+        For this reason it should maintain the same parameters as find. """
         for ter in self._data:
+            pass
 
 
 class xTerritory(object):
