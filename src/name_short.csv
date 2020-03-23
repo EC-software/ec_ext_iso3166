@@ -1,4 +1,7 @@
 # Short names
+# This is sort of a mixed bag, but som territories just have several names like the Vatican City
+
+# NOTE: If a territory have multiple values, like VA, there must be multiple lines
 
 alpha_2, name_short
 AF, Afghanistan
@@ -99,6 +102,7 @@ GY, Guyana
 HT, Haiti
 HM, Heard and McDonald Islands
 VA, Holy See
+VA, Vatican City
 HN, Honduras
 HK, Hong Kong
 HU, Hungary
@@ -246,6 +250,7 @@ BF, Burkina Faso
 UY, Uruguay
 UZ, Uzbekistan
 VE, Venezuela
+XK, Kosovo  # Not really an ISO-3166-1 country ...
 WF, Wallis and Futuna
 WS, Samoa
 YE, Yemen

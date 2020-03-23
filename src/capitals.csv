@@ -1,0 +1,215 @@
+# Capitols
+# https://www.countries-ofthe-world.com/capitals-of-the-world.html
+# see also: https://en.wikipedia.org/wiki/List_of_national_capitals
+
+# NOTE: If a territory have multiple values, like Bolivia, there must be multiple lines
+
+# NOTE: This file also demonstrate the use of an alternative primary key, in this case 'name_eng'.
+#       Though it works - it is not recommended practise, as it is bloody annoying to maintain the exact spelling...
+#       If in doubt, look at Palestine, Taiwan or the United Kingdom, then stick to alpha-2!
+
+name_eng, capital
+Afghanistan, Kabul
+Albania, Tirana
+Algeria, Algiers
+Andorra, Andorra la Vella
+Angola, Luanda
+Antigua and Barbuda, Saint John's
+Argentina, Buenos Aires
+Armenia, Yerevan
+Australia, Canberra
+Austria, Vienna
+Azerbaijan, Baku
+Bahamas (the), Nassau
+Bahrain, Manama
+Bangladesh, Dhaka
+Barbados, Bridgetown
+Belarus, Minsk
+Belgium, Brussels
+Belize, Belmopan
+Benin, Porto-Novo
+Bhutan, Thimphu
+Bolivia (Plurinational State of), La Paz (seat of government)
+Bolivia (Plurinational State of), Sucre (de jure)
+Bosnia and Herzegovina, Sarajevo
+Botswana, Gaborone
+Brazil, Brasilia
+Brunei Darussalam, Bandar Seri Begawan
+Bulgaria, Sofia
+Burkina Faso, Ouagadougou
+Burundi, Gitega
+Cabo Verde, Praia
+Cambodia, Phnom Penh
+Cameroon, Yaounde
+Canada, Ottawa
+Central African Republic (the), Bangui
+Chad, N'Djamena
+Chile, Santiago
+China, Beijing
+Colombia, Bogotá
+Comoros (the), Moroni
+Congo (the Democratic Republic of the), Kinshasa
+Congo (the), Brazzaville
+Costa Rica, San Jose
+Côte d'Ivoire, Yamoussoukro
+Croatia, Zagreb
+Cuba, Havana
+Cyprus, Nicosia
+Czechia, Prague
+Denmark, Copenhagen
+Djibouti, Djibouti city
+Dominica, Roseau
+Dominican Republic (the), Santo Domingo
+Ecuador, Quito
+Egypt, Cairo
+El Salvador, San Salvador
+Equatorial Guinea, Malabo (de jure)
+Equatorial Guinea, Oyala (seat of government)
+Eritrea, Asmara
+Estonia, Tallinn
+Eswatini, Lobamba (legislative and royal)
+Eswatini, Mbabane (administrative)
+Ethiopia, Addis Ababa
+Fiji, Suva
+Finland, Helsinki
+France, Paris
+Gabon, Libreville
+Gambia (the), Banjul
+Georgia, Tbilisi
+Germany, Berlin
+Ghana, Accra
+Greece, Athens
+Grenada, Saint George's
+Guatemala, Guatemala City
+Guinea, Conakry
+Guinea-Bissau, Bissau
+Guyana, Georgetown
+Haiti, Port-au-Prince
+Honduras, Tegucigalpa
+Hungary, Budapest
+Iceland, Reykjavik
+India, New Delhi
+Indonesia, Jakarta
+Iran (Islamic Republic of), Tehran
+Iraq, Baghdad
+Ireland, Dublin
+Israel, Jerusalem
+Italy, Rome
+Jamaica, Kingston
+Japan, Tokyo
+Jordan, Amman
+Kazakhstan, Nur-Sultan
+Kenya, Nairobi
+Kiribati, Tarawa
+Kosovo, Pristina
+Kuwait, Kuwait City
+Kyrgyzstan, Bishkek
+Lao People's Democratic Republic (the), Vientiane
+Latvia, Riga
+Lebanon, Beirut
+Lesotho, Maseru
+Liberia, Monrovia
+Libya, Tripoli
+Liechtenstein, Vaduz
+Lithuania, Vilnius
+Luxembourg, Luxembourg city
+Madagascar, Antananarivo
+Malawi, Lilongwe
+Malaysia, Kuala Lumpur
+Maldives, Male
+Mali, Bamako
+Malta, Valletta
+Marshall Islands (the), Majuro
+Mauritania, Nouakchott
+Mauritius, Port Louis
+Mexico, Mexico City
+Micronesia (Federated States of), Palikir
+Moldova (the Republic of), Chisinau
+Monaco, Monaco
+Mongolia, Ulaanbaatar
+Montenegro, Podgorica
+Morocco, Rabat
+Mozambique, Maputo
+Myanmar, Naypyidaw
+Namibia, Windhoek
+Nauru, Yaren
+Nepal, Kathmandu
+Netherlands (the), Amsterdam
+New Zealand, Wellington
+Nicaragua, Managua
+Niger (the), Niamey
+Nigeria, Abuja
+Korea (the Democratic People's Republic of), Pyongyang
+North Macedonia, Skopje
+Norway, Oslo
+Oman, Muscat
+Pakistan, Islamabad
+Palau, Ngerulmud
+"Palestine, State of", Jerusalem (claimed)
+"Palestine, State of", Ramallah (de facto)
+Panama, Panama City
+Papua New Guinea, Port Moresby
+Paraguay, Asunción
+Peru, Lima
+Philippines (the), Manila
+Poland, Warsaw
+Portugal, Lisbon
+Qatar, Doha
+Romania, Bucharest
+Russian Federation (the), Moscow
+Rwanda, Kigali
+Saint Kitts and Nevis, Basseterre
+Saint Lucia, Castries
+Saint Vincent and the Grenadines, Kingstown
+Samoa, Apia
+San Marino, San Marino
+Sao Tome and Principe, São Tomé
+Saudi Arabia, Riyadh
+Senegal, Dakar
+Serbia, Belgrade
+Seychelles, Victoria
+Sierra Leone, Freetown
+Singapore, Singapore
+Slovakia, Bratislava
+Slovenia, Ljubljana
+Solomon Islands, Honiara
+Somalia, Mogadishu
+South Africa, Bloemfontein (judicial)
+South Africa, Cape Town (legislative)
+South Africa, Pretoria (administrative)
+Korea (the Republic of), Seoul
+South Sudan, Juba
+Spain, Madrid
+Sri Lanka, Sri Jayawardenepura Kotte
+Sudan (the), Khartoum
+Suriname, Paramaribo
+Sweden, Stockholm
+Switzerland, Bern
+Syrian Arab Republic (the), Damascus
+Taiwan (Province of China), Taipei
+Tajikistan, Dushanbe
+"Tanzania, the United Republic of", Dodoma
+Thailand, Bangkok
+Timor-Leste, Dili
+Togo, Lomé
+Tonga, Nukuʻalofa
+Trinidad and Tobago, Port of Spain
+Tunisia, Tunis
+Turkey, Ankara
+Turkmenistan, Ashgabat
+Tuvalu, Funafuti
+Uganda, Kampala
+Ukraine, Kiev
+United Arab Emirates (the), Abu Dhabi
+United Kingdom of Great Britain and Northern Ireland (the), London
+United States of America (the), Washington D.C.
+Uruguay, Montevideo
+Uzbekistan, Tashkent
+Vanuatu, Port Vila
+Holy See (the), Vatican City
+Venezuela (Bolivarian Republic of), Caracas
+Viet Nam, Hanoi
+Yemen, Sana'a
+Yemen, Aden (temporary)
+Zambia, Lusaka
+Zimbabwe, Harare
