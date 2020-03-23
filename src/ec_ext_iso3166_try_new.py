@@ -36,6 +36,11 @@ print(f"get({token}) = {ter_as_text(ter_x)}")
 # lst_ters2 = trs.find('Rome', ['capital'])  # and. Allow search to target specific keys, e.g. 'capital' = 'Rome'
 # lst_ters2 = trs.find('Ro', ['capital', 'tld'])  # Italy, Romania
 # lst_ters3 = trs.find(['Ro', 'Pa'], ['capital'])  # Italy, France
+# lst_ters3 = trs.find(['Douglas'], ['capital'])  # multiple?
+# lst_ters3 = trs.find(['Brades'], ['capital'])  # has 3 capitols
+# test "French Southern Territories" >> "Saint-Pierre, Réunion"
+
+
 
 # ter_gl = trs.guess('Nuuk')  # Never return multiple hits (that would't be a guess)
 #
