@@ -12,7 +12,7 @@ AIA, Anguilla
 ALA, Åland Islands
 ALB, Albania
 AND, Andorra
-ANT, Netherlands Antilles
+#ANT, Netherlands Antilles # Not a recognised iso 3166-1 country
 ARE, United Arab Emirates
 ARG, Argentina
 ARM, Armenia

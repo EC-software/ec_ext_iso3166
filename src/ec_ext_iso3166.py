@@ -1,5 +1,14 @@
 import os
 #import shlex  # Won't work with e.g. line: "AF, AFG, 004, Afghanistan, Afghanistan (l')"
+import logging
+
+logging.basicConfig(
+    # format="%(asctime)s - %(levelname)s - %(message)s",  # minimum
+    format="%(asctime)s - [%(filename)s:%(lineno)d] - %(levelname)s - %(message)s",  # verbose
+    filename="ec_ext_iso3166.log",
+    filemode="w",
+    level=logging.DEBUG)
+log = logging.getLogger(__name__)
 
 import pprint
 
@@ -37,6 +46,8 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 #   https://github.com/flyingcircusio/pycountry  -- repo of 'pycountry'
 #   https://datahub.io/core/country-list#python
 
+log.debug("> main()")
+
 # CONSTANTS
 
 # ISO_3166_1_KEYS - It is not as standard as you would think, which keys belongs to a ISO 3166-1 record :-(
@@ -46,10 +57,10 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 # source: https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 # source: https://www.iso.org/obp/ui/#search
 ISO_3166_1_KEYS = ["alpha_2", # "alpha-2",  #  a two-letter code that represents a country name, recommended as the general purpose code
-                   "short_name", # short_name_en?, English_short_name?, French_short_name?
-                   # "short_name_lower_case", -- Not in use in ec_ext_iso3166
-                   # "short_name_uppercase_en", -- Not in use in ec_ext_iso3166
-                   "full_name", # full_name_en?
+                   "name_short", # name_short_en?, name_short_fr?
+                   # "name_short_lower_case", -- Not in use in ec_ext_iso3166
+                   # "name_short_uppercase_en", -- Not in use in ec_ext_iso3166
+                   "name_full", # name_full_en?
                    "alpha_3",  # "alpha-3",  # a three-letter code that represents a country name, which is usually more closely related to the country name
                    "alpha-4",  # a four-letter code that represents a country name that is no longer in use. The structure depends on the reason why the country name was removed from ISO 3166-1 and added to ISO 3166-3Valid for few entries, e.g. 'AN'
                    "numeric_3",  # "numeric-3",
@@ -89,6 +100,9 @@ def _line_to_list(str_lin, sep=',', qot='"'):
             lst_tmp[n] = f'"{lst_tmp[n]}"'  # re-insert the qot chars for later identification
             lst_tmp[n-1] = lst_tmp[n-1].strip().rstrip(',').strip()  # remove excessive sep terminating prior token
     lst_tmp = [tok for tok in lst_tmp if tok != '']  # remove the empty tokens, creates by 'sep qot' sequences
+    # At this point no tokens should start or end with sep, but n=2 do if line starts with a qot, so...
+    lst_tmp = [tok.strip(sep) for tok in lst_tmp]
+    # Now split with sep
     for itm in lst_tmp:
         if itm[0] == qot:
             lst_ret.append(itm.strip(qot))  # add the item, but loose the quotes
@@ -108,6 +122,8 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
     val_on = lst_new[0].strip()
     key_in = lst_hdr[1].strip()
     val_in = lst_new[1].strip()
+    if any(['.nu' in slot for slot in [key_on, val_on, key_in, val_in]]):
+        log.debug(f"<{lst_hdr} : {lst_new}>")
     bol_found = False
     if all([len(tok) > 0 for tok in [key_on, val_on, key_in, val_in]]):  # We have 4 valid entries
         # print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
@@ -128,7 +144,7 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
                 bol_found = True
                 break  # We can't continue the loop, as we have changed dic_in
         if not bol_found:
-            print(f" -- Filed to find an 'ON' for {key_on}: {val_on} << {key_in} = {val_in}")
+            log.warning(f" -- Filed to find an 'ON' for {key_on}: {val_on} << {key_in} = {val_in}")
     return dic_in
 
 
@@ -140,6 +156,7 @@ class Territories:
     def _loaddata(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .csv files """
         str_fn_iso3166 = r"data/iso3166-1.csv"  # file name for the basic ISO 3166 file
+        log.info(f"loading file: {str_fn_iso3166}")
         sep = ','  # assumed separator in this file
         qot = '"'  # assumed quoting character in this file
         dic_iso3166 = dict()
@@ -161,7 +178,7 @@ class Territories:
                             raise ValueError(f"key: {str_num} already exist - First column in file {str_fn_iso3166} must have unique values ...")
                     num_cnt += 1
         self._data = dic_iso3166
-        print(f"Done reading base iso-3166-1 for {len(self._data)} territories")
+        log.info(f"Done reading base iso-3166-1 for {len(self._data)} territories")
 
         str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # Use this place to look for other .csv files later
 
@@ -169,7 +186,9 @@ class Territories:
         for root, dirs, files in os.walk(str_root_path):
             for name in files:
                 if (name.endswith(".csv")) and ('iso3166-1.csv' not in name):  # We all ready handled iso3166-1.csv
-                    print(f" + Extending base iso-3166-1 with: {os.path.join(root, name)}")
+                    log.info(f" + Extending base iso-3166-1 with: {os.path.join(root, name)}")
+                    if 'capitals' in name:
+                        log.debug("hit")
                     num_cnt = 0
                     with open(os.path.join(root, name), 'r') as fil_ex:
                         for line in fil_ex:
@@ -181,6 +200,7 @@ class Territories:
                                 else:
                                     dic_iso3166 = _add_ext_key(dic_iso3166, lst_head, lst_in)
                                 num_cnt += 1
+                    log.info(f"   Done reading {num_cnt} extra info lines")
 
         # End of functions for reading in data...
 
@@ -214,6 +234,8 @@ class Territories:
         return sorted(set_cat)
 
     def list_missing_values(self):
+        """ For each territory, list the names of the categories that are not filled, but exist for other territories.
+        a categories like 'name_misc_en', that only exist for few territories, will be often mentioned here. """
         lst_cat = self.categories()
         lst_ret = list()
         for ter in sorted(self._data.keys()):
@@ -234,3 +256,5 @@ class Territories:
         For this reason it should maintain the same parameters as find. """
         for ter in self._data:
             pass
+
+log.debug("< main()")

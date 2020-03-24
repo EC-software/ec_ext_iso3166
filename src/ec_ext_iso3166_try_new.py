@@ -37,7 +37,7 @@ token = "DK"
 ter_dk = trs.get(token)  # Get a specific territory by primary key
 print(f"get({token}) = {ter_as_text(ter_dk)}")
 
-token = "VA"
+token = "AQ"
 ter_x = trs.get(token)  # Get a specific territory by primary key
 print(f"get({token}) = {ter_as_text(ter_x)}")
 #
