@@ -1,0 +1,253 @@
+# source: https://unstats.un.org/unsd/methodology/m49/
+# French
+
+alpha_3, name_short_fr
+AFG, Afghanistan
+ZAF, Afrique du Sud
+ALB, Albanie
+DZA, Algérie
+DEU, Allemagne
+AND, Andorre
+AGO, Angola
+AIA, Anguilla
+ATA, Antarctique
+ATG, Antigua-et-Barbuda
+SAU, Arabie saoudite
+ARG, Argentine
+ARM, Arménie
+ABW, Aruba
+AUS, Australie
+AUT, Autriche
+AZE, Azerbaïdjan
+BHS, Bahamas
+BHR, Bahreïn
+BGD, Bangladesh
+BRB, Barbade
+BLR, Bélarus
+BEL, Belgique
+BLZ, Belize
+BEN, Bénin
+BMU, Bermudes
+BTN, Bhoutan
+BOL, Bolivie (État plurinational de)
+BES, Bonaire; Saint-Eustache et Saba
+BIH, Bosnie-Herzégovine
+BWA, Botswana
+BRA, Brésil
+BRN, Brunéi Darussalam
+BGR, Bulgarie
+BFA, Burkina Faso
+BDI, Burundi
+CPV, Cabo Verde
+KHM, Cambodge
+CMR, Cameroun
+CAN, Canada
+CHL, Chili
+CHN, Chine
+HKG, Chine; région administrative spéciale de Hong Kong
+MAC, Chine; région administrative spéciale de Macao
+CYP, Chypre
+COL, Colombie
+COM, Comores
+COG, Congo
+CRI, Costa Rica
+CIV, Côte d’Ivoire
+HRV, Croatie
+CUB, Cuba
+CUW, Curaçao
+DNK, Danemark
+DJI, Djibouti
+DMA, Dominique
+EGY, Égypte
+SLV, El Salvador
+ARE, Émirats arabes unis
+ECU, Équateur
+ERI, Érythrée
+ESP, Espagne
+EST, Estonie
+SWZ, Eswatini
+PSE, État de Palestine
+USA, États-Unis d’Amérique
+ETH, Éthiopie
+RUS, Fédération de Russie
+FJI, Fidji
+FIN, Finlande
+FRA, France
+GAB, Gabon
+GMB, Gambie
+GEO, Géorgie
+SGS, Géorgie du Sud-et-les Îles Sandwich du Sud
+GHA, Ghana
+GIB, Gibraltar
+GRC, Grèce
+GRD, Grenade
+GRL, Groenland
+GLP, Guadeloupe
+GUM, Guam
+GTM, Guatemala
+GGY, Guernesey
+GIN, Guinée
+GNQ, Guinée équatoriale
+GNB, Guinée-Bissau
+GUY, Guyana
+GUF, Guyane française
+HTI, Haïti
+HND, Honduras
+HUN, Hongrie
+BVT, Île Bouvet
+CXR, Île Christmas
+IMN, Île de Man
+HMD, Île Heard-et-Îles MacDonald
+NFK, Île Norfolk
+CYM, Îles Caïmanes
+COK, Îles Cook
+ALA, Îles d’Åland
+CCK, Îles des Cocos (Keeling)
+FLK, Îles Falkland (Malvinas)
+FRO, Îles Féroé
+MNP, Îles Mariannes du Nord
+MHL, Îles Marshall
+UMI, Îles mineures éloignées des États-Unis
+SLB, Îles Salomon
+SJM, Îles Svalbard-et-Jan Mayen
+TCA, Îles Turques-et-Caïques
+VIR, Îles Vierges américaines
+VGB, Îles Vierges britanniques
+WLF, Îles Wallis-et-Futuna
+IND, Inde
+IDN, Indonésie
+IRN, Iran (République islamique d’)
+IRQ, Iraq
+IRL, Irlande
+ISL, Islande
+ISR, Israël
+ITA, Italie
+JAM, Jamaïque
+JPN, Japon
+JEY, Jersey
+JOR, Jordanie
+KAZ, Kazakhstan
+KEN, Kenya
+KGZ, Kirghizistan
+KIR, Kiribati
+KWT, Koweït
+LSO, Lesotho
+LVA, Lettonie
+LBN, Liban
+LBR, Libéria
+LBY, Libye
+LIE, Liechtenstein
+LTU, Lituanie
+LUX, Luxembourg
+MKD, Macédoine du Nord
+MDG, Madagascar
+MYS, Malaisie
+MWI, Malawi
+MDV, Maldives
+MLI, Mali
+MLT, Malte
+MAR, Maroc
+MTQ, Martinique
+MUS, Maurice
+MRT, Mauritanie
+MYT, Mayotte
+MEX, Mexique
+FSM, Micronésie (États fédérés de)
+MCO, Monaco
+MNG, Mongolie
+MNE, Monténégro
+MSR, Montserrat
+MOZ, Mozambique
+MMR, Myanmar
+NAM, Namibie
+NRU, Nauru
+NPL, Népal
+NIC, Nicaragua
+NER, Niger
+NGA, Nigéria
+NIU, Nioué
+NOR, Norvège
+NCL, Nouvelle-Calédonie
+NZL, Nouvelle-Zélande
+OMN, Oman
+UGA, Ouganda
+UZB, Ouzbékistan
+PAK, Pakistan
+PLW, Palaos
+PAN, Panama
+PNG, Papouasie-Nouvelle-Guinée
+PRY, Paraguay
+NLD, Pays-Bas
+PER, Pérou
+PHL, Philippines
+PCN, Pitcairn
+POL, Pologne
+PYF, Polynésie française
+PRI, Porto Rico
+PRT, Portugal
+QAT, Qatar
+SYR, République arabe syrienne
+CAF, République centrafricaine
+KOR, République de Corée
+MDA, République de Moldova
+COD, République démocratique du Congo
+LAO, République démocratique populaire lao
+DOM, République dominicaine
+PRK, République populaire démocratique de Corée
+TZA, République-Unie de Tanzanie
+REU, Réunion
+ROU, Roumanie
+GBR, Royaume-Uni de Grande-Bretagne et d’Irlande du Nord
+RWA, Rwanda
+ESH, Sahara occidental
+BLM, Saint-Barthélemy
+SHN, Sainte-Hélène
+LCA, Sainte-Lucie
+KNA, Saint-Kitts-et-Nevis
+SMR, Saint-Marin
+MAF, Saint-Martin (partie française)
+SXM, Saint-Martin (partie néerlandaise)
+SPM, Saint-Pierre-et-Miquelon
+VAT, Saint-Siège
+VCT, Saint-Vincent-et-les Grenadines
+WSM, Samoa
+ASM, Samoa américaines
+STP, Sao Tomé-et-Principe
+SEN, Sénégal
+SRB, Serbie
+M49=680, Sercq
+SYC, Seychelles
+SLE, Sierra Leone
+SGP, Singapour
+SVK, Slovaquie
+SVN, Slovénie
+SOM, Somalie
+SDN, Soudan
+SSD, Soudan du Sud
+LKA, Sri Lanka
+SWE, Suède
+CHE, Suisse
+SUR, Suriname
+TJK, Tadjikistan
+TCD, Tchad
+CZE, Tchéquie
+ATF, Terres australes françaises
+IOT, Territoire britannique de l'océan Indien
+THA, Thaïlande
+TLS, Timor-Leste
+TGO, Togo
+TKL, Tokélaou
+TON, Tonga
+TTO, Trinité-et-Tobago
+TUN, Tunisie
+TKM, Turkménistan
+TUR, Turquie
+TUV, Tuvalu
+UKR, Ukraine
+URY, Uruguay
+VUT, Vanuatu
+VEN, Venezuela (République bolivarienne du)
+VNM, Viet Nam
+YEM, Yémen
+ZMB, Zambie
+ZWE, Zimbabwe
