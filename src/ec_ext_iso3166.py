@@ -17,10 +17,10 @@ You can easily make your own extensions, by writing new .csv files,
 only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 """
 
-# ToDo: Clean up the many searchers, what's supposed to be the difference between guess() and find*()
+# ToDo: Clean up the many searchers, what's supposed to be the difference between guess() and find()
 #   Idea: All will: Always search ISO 3166 first, but
 #   guess():
-#       - Never return multiple hits (that would not be a guess)
+#       - Never return multiple hits (that would't be a guess, would it?)
 #   locate():
 #       - First and foremost, tries to be compatible with https://pypi.org/project/pycountry/
 #   find():
@@ -29,6 +29,49 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 # ToDo: Make search by number (as int) work
 # ToDo: Introduce logging :-)
 # ToDo: Write Test Class :-)
+# ToDo: Consider changing from .csv to .json  Pro.: A number of errors disappears, Con.: Less comments possible
+# ToDo: Consider exploring one or more of the following:
+#   https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
+#   https://salsa.debian.org/iso-codes-team/iso-codes/-/tree/master/data
+#   https://pypi.org/project/pycountry/  -- webpage of 'pycountry'
+#   https://github.com/flyingcircusio/pycountry  -- repo of 'pycountry'
+#   https://datahub.io/core/country-list#python
+
+# CONSTANTS
+
+# ISO_3166_1_KEYS - It is not as standard as you would think, which keys belongs to a ISO 3166-1 record :-(
+# source: https://www.iso.org/glossary-for-iso-3166.html
+# source: https://www.iso.org/obp/ui/#iso:code:3166:AD
+# source: https://www.iso.org/obp/ui/#iso:std:iso:3166:-1:ed-3:v1:en,fr
+# source: https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
+# source: https://www.iso.org/obp/ui/#search
+ISO_3166_1_KEYS = ["alpha_2", # "alpha-2",  #  a two-letter code that represents a country name, recommended as the general purpose code
+                   "short_name", # short_name_en?, English_short_name?, French_short_name?
+                   # "short_name_lower_case", -- Not in use in ec_ext_iso3166
+                   # "short_name_uppercase_en", -- Not in use in ec_ext_iso3166
+                   "full_name", # full_name_en?
+                   "alpha_3",  # "alpha-3",  # a three-letter code that represents a country name, which is usually more closely related to the country name
+                   "alpha-4",  # a four-letter code that represents a country name that is no longer in use. The structure depends on the reason why the country name was removed from ISO 3166-1 and added to ISO 3166-3Valid for few entries, e.g. 'AN'
+                   "numeric_3",  # "numeric-3",
+                   "remarks",
+                   "independent",
+                   "territory_name",
+                   "status",
+                   "status_remark"]
+
+
+def order_iso3166_keys(lst_keys):
+    """ Order the given keys alphabetically
+    If any of the ISO 3166 keys are present, they are progressed to the start, in default order. """
+    lst_ref_rev = reversed([itm for itm in ISO_3166_1_KEYS])  # make a reversed copy of the constant
+    if isinstance(lst_keys, list):
+        lst_keys = sorted(lst_keys)
+        for key_iso in lst_ref_rev:
+            if key_iso in lst_keys:
+                lst_keys.insert(0, lst_keys.pop(lst_keys.index(key_iso)))  # move to front of list
+        return lst_keys
+    else:
+        return lst_keys  # if it's not a list, just return it untouched...
 
 
 def _line_to_list(str_lin, sep=',', qot='"'):
@@ -67,10 +110,10 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
     val_in = lst_new[1].strip()
     bol_found = False
     if all([len(tok) > 0 for tok in [key_on, val_on, key_in, val_in]]):  # We have 4 valid entries
-        ##print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
+        # print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
         for key_te in dic_in.keys():  # Loop the Territories
             if (key_on in dic_in[key_te].keys()) and (dic_in[key_te][key_on] == val_on):  # We have found the 'on'
-                ##print(f" on: {dic_in[key_te]}")
+                # print(f" on: {dic_in[key_te]}")
                 terr_upd = dic_in[key_te]
                 if key_in in terr_upd.keys():  # The 'new' key all-ready exists
                     if isinstance(terr_upd[key_in], list):  # It's all-ready a list, append.
@@ -112,7 +155,7 @@ class Territories:
                         str_num = lst_in[0]  # Note: We assume the first column to be the Alpha-2 id.
                         if str_num not in dic_iso3166.keys():
                             dic_iso3166[str_num] = dict()
-                            for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogenious search for all parameters
+                            for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
                                 dic_iso3166[str_num][lst_head[n]] = lst_in[n]
                         else:
                             raise ValueError(f"key: {str_num} already exist - First column in file {str_fn_iso3166} must have unique values ...")
@@ -125,7 +168,7 @@ class Territories:
         # Read the additional .csv files. NOTE: This is where the EC Extendable comes from !!!
         for root, dirs, files in os.walk(str_root_path):
             for name in files:
-                if (".csv" in name) and ('iso3166-1.csv' not in name):  # We all ready handled iso3166-1.csv above
+                if (name.endswith(".csv")) and ('iso3166-1.csv' not in name):  # We all ready handled iso3166-1.csv
                     print(f" + Extending base iso-3166-1 with: {os.path.join(root, name)}")
                     num_cnt = 0
                     with open(os.path.join(root, name), 'r') as fil_ex:
@@ -142,11 +185,16 @@ class Territories:
         # End of functions for reading in data...
 
     def dump_as_text(self):
+        """ Convert the entire self data structure to text format
+        ToDo: Consider optional output modes, e.g. 'pretty', 'csv, 'json', other?
+        :return: text string, likely with multiple lines in it...
+        """
         str_ret = str()
         for key_t in sorted(self._data.keys()):
             ter = self._data[key_t]
             str_ret += f"\nTER: {ter['alpha_2']}"
-            for k in sorted(ter.keys()):
+            #for k in sorted(ter.keys()):
+            for k in order_iso3166_keys(ter.keys()):
                 str_ret += f"\n     {k}: {ter[k]}"
         return str_ret
 

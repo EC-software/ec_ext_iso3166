@@ -10,14 +10,18 @@
 #       If in doubt, look at Palestine, Taiwan or the United Kingdom, then stick to alpha-2!
 
 name_eng, capital
+"Palestine, State of", Jerusalem (claimed)  # Don't seem to read right <---------------------------
+"Palestine, State of", Ramallah (de facto)  # Don't seem to read right <---------------------------
+"Saint Helena, Ascension and Tristan da Cunha", Jamestown  # Don't seem to read right <---------------------------
+"Tanzania, the United Republic of", Dodoma  # Don't seem to read right <---------------------------
 Afghanistan, Kabul
 Albania, Tirana
 Algeria, Algiers
+American Samoa, Pago Pago
 Andorra, Andorra la Vella
 Angola, Luanda
 Anguilla, The Valley
 Antigua and Barbuda, Saint John's
-American Samoa, Pago Pago
 Argentina, Buenos Aires
 Armenia, Yerevan
 Aruba, Oranjestad
@@ -55,18 +59,18 @@ Chile, Santiago
 China, Beijing
 Christmas Island, Flying Fish Cove
 Cocos (Keeling) Islands (the), West Island
-Cook Islands (the), Avarua
 Colombia, Bogotá
 Comoros (the), Moroni
 Congo (the Democratic Republic of the), Kinshasa
 Congo (the), Brazzaville
+Cook Islands (the), Avarua
 Costa Rica, San Jose
-Côte d'Ivoire, Yamoussoukro
 Croatia, Zagreb
 Cuba, Havana
 Curaçao, Willemstad
 Cyprus, Nicosia
 Czechia, Prague
+Côte d'Ivoire, Yamoussoukro
 Denmark, Copenhagen
 Djibouti, Djibouti city
 Dominica, Roseau
@@ -104,6 +108,7 @@ Guinea, Conakry
 Guinea-Bissau, Bissau
 Guyana, Georgetown
 Haiti, Port-au-Prince
+Holy See (the), Vatican City
 Honduras, Tegucigalpa
 Hong Kong, City of Victoria
 Hungary, Budapest
@@ -123,6 +128,8 @@ Jordan, Amman
 Kazakhstan, Nur-Sultan
 Kenya, Nairobi
 Kiribati, Tarawa
+Korea (the Democratic People's Republic of), Pyongyang
+Korea (the Republic of), Seoul
 Kosovo, Pristina
 Kuwait, Kuwait City
 Kyrgyzstan, Bishkek
@@ -153,9 +160,9 @@ Moldova (the Republic of), Chisinau
 Monaco, Monaco
 Mongolia, Ulaanbaatar
 Montenegro, Podgorica
-Montserrat, Plymouth (de jure)
 Montserrat, Brades (de facto)
 Montserrat, Little Bay (under construction)
+Montserrat, Plymouth (de jure)
 Morocco, Rabat
 Mozambique, Maputo
 Myanmar, Naypyidaw
@@ -170,15 +177,12 @@ Niger (the), Niamey
 Nigeria, Abuja
 Niue, Alofi
 Norfolk Island, Kingston
-Korea (the Democratic People's Republic of), Pyongyang
 North Macedonia, Skopje
 Northern Mariana Islands (the), Saipan
 Norway, Oslo
 Oman, Muscat
 Pakistan, Islamabad
 Palau, Ngerulmud
-"Palestine, State of", Jerusalem (claimed)  # Don't seem to read right <---------------------------
-"Palestine, State of", Ramallah (de facto)  # Don't seem to read right <---------------------------
 Panama, Panama City
 Papua New Guinea, Port Moresby
 Paraguay, Asunción
@@ -189,12 +193,11 @@ Poland, Warsaw
 Portugal, Lisbon
 Puerto Rico, San Juan
 Qatar, Doha
-Réunion, Saint-Denis
 Romania, Bucharest
 Russian Federation (the), Moscow
 Rwanda, Kigali
+Réunion, Saint-Denis
 Saint Barthélemy, Gustavia
-"Saint Helena, Ascension and Tristan da Cunha", Jamestown  # Don't seem to read right <---------------------------
 Saint Kitts and Nevis, Basseterre
 Saint Lucia, Castries
 Saint Martin (French part), Marigot
@@ -218,7 +221,6 @@ South Africa, Bloemfontein (judicial)
 South Africa, Cape Town (legislative)
 South Africa, Pretoria (administrative)
 South Georgia and the South Sandwich Islands, King Edward Point
-Korea (the Republic of), Seoul
 South Sudan, Juba
 Spain, Madrid
 Sri Lanka, Sri Jayawardenepura Kotte
@@ -230,7 +232,6 @@ Switzerland, Bern
 Syrian Arab Republic (the), Damascus
 Taiwan (Province of China), Taipei
 Tajikistan, Dushanbe
-"Tanzania, the United Republic of", Dodoma  # Don't seem to read right <---------------------------
 Thailand, Bangkok
 Timor-Leste, Dili
 Togo, Lomé
@@ -250,15 +251,14 @@ United States of America (the), Washington D.C.
 Uruguay, Montevideo
 Uzbekistan, Tashkent
 Vanuatu, Port Vila
-Holy See (the), Vatican City
 Venezuela (Bolivarian Republic of), Caracas
 Viet Nam, Hanoi
 Virgin Islands (British), Road Town
 Virgin Islands (U.S.), Charlotte Amalie
 Wallis and Futuna, Mata Utu
 Western Sahara, Laayoune (largest city)
-Yemen, Sana'a
 Yemen, Aden (temporary)
+Yemen, Sana'a
 Zambia, Lusaka
 Zimbabwe, Harare
 Åland Islands, Mariehamn

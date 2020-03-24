@@ -20,15 +20,24 @@ print(" ------ Welcome to test -------------")
 
 trs = ec_ext_iso3166.Territories()  # Note this returns the entire collection of countries (territories)
 print(f"The trs object: {trs}")
+
 # print(f"Dump: {trs.dump_as_text()}")
+# key_a = 'name_eng'
+# key_b = 'name_short_en'
+# for key_c in trs._data.keys():
+#     if all([k in trs._data[key_c].keys() for k in [key_a, key_b]]):
+#         if trs._data[key_c][key_a] != trs._data[key_c][key_b]:
+#             print(f" - k: {key_c} ({key_a},{key_b}) >> {trs._data[key_c][key_a]} != {trs._data[key_c][key_b]}")
+
 print(f"Sorted categories: {trs.categories()}")
+print(f"Orderd categories: {ec_ext_iso3166.order_iso3166_keys(trs.categories())}")
 print(f"Missing values: {trs.list_missing_values()}")
 
 token = "DK"
 ter_dk = trs.get(token)  # Get a specific territory by primary key
 print(f"get({token}) = {ter_as_text(ter_dk)}")
 
-token = "BQ"
+token = "VA"
 ter_x = trs.get(token)  # Get a specific territory by primary key
 print(f"get({token}) = {ter_as_text(ter_x)}")
 #
