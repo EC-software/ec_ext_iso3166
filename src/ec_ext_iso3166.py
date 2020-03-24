@@ -128,7 +128,7 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
                 bol_found = True
                 break  # We can't continue the loop, as we have changed dic_in
         if not bol_found:
-            print(f" -- Filed to find an 'ON' for {key_on}: {val_on}")
+            print(f" -- Filed to find an 'ON' for {key_on}: {val_on} << {key_in} = {val_in}")
     return dic_in
 
 
@@ -139,7 +139,7 @@ class Territories:
 
     def _loaddata(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .csv files """
-        str_fn_iso3166 = r"iso3166-1.csv"  # file name for the basic ISO 3166 file
+        str_fn_iso3166 = r"data/iso3166-1.csv"  # file name for the basic ISO 3166 file
         sep = ','  # assumed separator in this file
         qot = '"'  # assumed quoting character in this file
         dic_iso3166 = dict()
