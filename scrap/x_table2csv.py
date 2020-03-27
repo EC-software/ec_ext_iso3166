@@ -1,6 +1,6 @@
 import sys
 str_ffn_in = r"/home/martin/PycharmProjects/ec_ext_iso3166/data/iso3166.table"
-str_ffn_ou = r"/home/martin/PycharmProjects/ec_ext_iso3166/ext_iso3166/iso3166_tmp.csv"
+str_ffn_ou = r"/home/martin/PycharmProjects/ec_ext_iso3166/iso3166_ext/iso3166_tmp.csv"
 
 if __name__ == '__main__':
 

@@ -1,5 +1,5 @@
-# from ext_iso3166 import world
-import ext_iso3166
+# from iso3166_ext import world
+import iso3166_ext
 
 """ A New Try
 After having considered things one more time.
@@ -25,12 +25,12 @@ def ter_as_text(ter):
 #             print(f" - k: {key_c} ({key_a},{key_b}) >> {trs._data[key_c][key_a]} != {trs._data[key_c][key_b]}")
 
 print(" ------ Welcome to tests-bed -------------")
-
-trs = ext_iso3166.world.Territories()  # Note this returns the entire collection of countries (territories)
+print(iso3166_ext.root_dir)
+trs = iso3166_ext.world.Territories()  # Note this returns the entire collection of countries (territories)
 print(f"The trs object: {trs}  <-- You should see: <ec_ext_iso3166.Territories object at ...>")
 
 print(f"Sorted categories: {trs.categories()}")
-print(f"Orderd categories: {ext_iso3166.world.order_iso3166_keys(trs.categories())}")
+print(f"Orderd categories: {iso3166_ext.world.order_iso3166_keys(trs.categories())}")
 print(f"Missing values: {trs.list_missing_values()}")
 
 token = "DK"

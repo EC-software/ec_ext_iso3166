@@ -1,10 +1,14 @@
 
-import sys
-from ext_iso3166 import world
+from iso3166_ext import world
+import iso3166_ext
 
-print(__name__)
-print(dir(sys))
+print("\niso3166_ext:")
+print(iso3166_ext.__file__)
+print(dir(iso3166_ext))
+
+print("\nworld:")
+print(world.__file__)
 print(dir(world))
 
-# for d in dir(ext_iso3166):
-#     pass  # print(f"{d}: {ext_iso3166.d}")
+# for d in dir(iso3166_ext):
+#     pass  # print(f"{d}: {iso3166_ext.d}")

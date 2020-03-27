@@ -17,6 +17,3 @@ print(pycountry.countries.search_fuzzy('Cote'))
 
 # lookup
 print(pycountry.countries.lookup('de'))
-
-print()
-print()

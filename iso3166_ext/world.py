@@ -5,7 +5,7 @@ import os
 logging.basicConfig(
     # format="%(asctime)s - %(levelname)s - %(message)s",  # minimum
     format="%(asctime)s - [%(filename)s:%(lineno)d] - %(levelname)s - %(message)s",  # verbose
-    filename="ec_ext_iso3166.log",
+    filename="iso3166_ext.log",
     filemode="w",
     level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 #   guess():
 #       - Never return multiple hits (that would't be a guess, would it?)
 #   locate():
-#       - First and foremost, tries to be compatible with https://pypi.org/project/pycountry/
+#       - First and foremost, tries to be compatible with
 #   find():
 #       - Allow for multiple returns, somehow...
 #       - Allow search to target specific keys, e.g. 'capital' = 'Rome'
@@ -38,6 +38,7 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 # ToDo: Write Test Class :-)
 # ToDo: Consider changing from .csv to .json  Pro.: A number of errors disappears, Con.: Less comments possible
 # ToDo: Consider exploring one or more of the following:
+#   https://pypi.org/project/iso3166/
 #   https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 #   https://salsa.debian.org/iso-codes-team/iso-codes/-/tree/master/data
 #   https://pypi.org/project/pycountry/  -- webpage of 'pycountry'
@@ -154,7 +155,7 @@ class Territories:
 
     def _loaddata(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .csv files """
-        str_fn_iso3166 = r"ext_iso3166/data/iso3166-1.csv"  # file name for the basic ISO 3166 file
+        str_fn_iso3166 = r"iso3166_ext/data/iso3166-1.csv"  # file name for the basic ISO 3166 file
         log.info(f"loading file: {str_fn_iso3166}")
         sep = ','  # assumed separator in this file
         qot = '"'  # assumed quoting character in this file
