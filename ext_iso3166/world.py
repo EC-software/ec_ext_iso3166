@@ -1,6 +1,6 @@
-import os
-#import shlex  # Won't work with e.g. line: "AF, AFG, 004, Afghanistan, Afghanistan (l')"
+# import shlex  # Won't work with e.g. line: "AF, AFG, 004, Afghanistan, Afghanistan (l')"
 import logging
+import os
 
 logging.basicConfig(
     # format="%(asctime)s - %(levelname)s - %(message)s",  # minimum
@@ -10,7 +10,6 @@ logging.basicConfig(
     level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-import pprint
 
 """ EC Extendable ISO 3166 class
 So far, only iso-3166-1 (country level) is implemented ...
@@ -36,7 +35,6 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 #       - Allow for multiple returns, somehow...
 #       - Allow search to target specific keys, e.g. 'capital' = 'Rome'
 # ToDo: Make search by number (as int) work
-# ToDo: Introduce logging :-)
 # ToDo: Write Test Class :-)
 # ToDo: Consider changing from .csv to .json  Pro.: A number of errors disappears, Con.: Less comments possible
 # ToDo: Consider exploring one or more of the following:
@@ -56,11 +54,11 @@ log.debug("> main()")
 # source: https://www.iso.org/obp/ui/#iso:std:iso:3166:-1:ed-3:v1:en,fr
 # source: https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 # source: https://www.iso.org/obp/ui/#search
-ISO_3166_1_KEYS = ["alpha_2", # "alpha-2",  #  a two-letter code that represents a country name, recommended as the general purpose code
-                   "name_short", # name_short_en?, name_short_fr?
+ISO_3166_1_KEYS = ["alpha_2",  # "alpha-2",  #  a two-letter code that represents a country name, recommended as the general purpose code
+                   "name_short",  # name_short_en?, name_short_fr?
                    # "name_short_lower_case", -- Not in use in ec_ext_iso3166
                    # "name_short_uppercase_en", -- Not in use in ec_ext_iso3166
-                   "name_full", # name_full_en?
+                   "name_full",  # name_full_en?
                    "alpha_3",  # "alpha-3",  # a three-letter code that represents a country name, which is usually more closely related to the country name
                    "alpha-4",  # a four-letter code that represents a country name that is no longer in use. The structure depends on the reason why the country name was removed from ISO 3166-1 and added to ISO 3166-3Valid for few entries, e.g. 'AN'
                    "numeric_3",  # "numeric-3",
@@ -149,13 +147,14 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
 
 
 class Territories:
-    """     """
+    """ Territories are generally Countries, but also include e.g. Antarctica, Virgin Islands, Vatican state, etc. """
+
     def __init__(self):
         self._loaddata()
 
     def _loaddata(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .csv files """
-        str_fn_iso3166 = r"data/iso3166-1.csv"  # file name for the basic ISO 3166 file
+        str_fn_iso3166 = r"ext_iso3166/data/iso3166-1.csv"  # file name for the basic ISO 3166 file
         log.info(f"loading file: {str_fn_iso3166}")
         sep = ','  # assumed separator in this file
         qot = '"'  # assumed quoting character in this file
@@ -202,7 +201,7 @@ class Territories:
                                 num_cnt += 1
                     log.info(f"   Done reading {num_cnt} extra info lines")
 
-        # End of functions for reading in data...
+        # End of functions _loaddata()
 
     def dump_as_text(self):
         """ Convert the entire self data structure to text format
@@ -213,7 +212,7 @@ class Territories:
         for key_t in sorted(self._data.keys()):
             ter = self._data[key_t]
             str_ret += f"\nTER: {ter['alpha_2']}"
-            #for k in sorted(ter.keys()):
+            # for k in sorted(ter.keys()):
             for k in order_iso3166_keys(ter.keys()):
                 str_ret += f"\n     {k}: {ter[k]}"
         return str_ret
@@ -222,8 +221,10 @@ class Territories:
         """ Return a dictionary with the territory information for territory with alpha-2 = id
         if id don't exist, then return None. """
         if str_id in self._data.keys():
+            log.warning(f"Found: {str_id} in self-data")
             return self._data[str_id]
         else:
+            log.warning(f"Can't find: {str_id} in self-data")
             return None
 
     def categories(self):
@@ -235,7 +236,8 @@ class Territories:
 
     def list_missing_values(self):
         """ For each territory, list the names of the categories that are not filled, but exist for other territories.
-        a categories like 'name_misc_en', that only exist for few territories, will be often mentioned here. """
+        a categories like 'name_misc_en', that only exist for few territories, will be often mentioned here.
+        ToDo: Let missing_values return list by value, in add to list by key """
         lst_cat = self.categories()
         lst_ret = list()
         for ter in sorted(self._data.keys()):

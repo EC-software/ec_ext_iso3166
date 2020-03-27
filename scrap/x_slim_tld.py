@@ -1,7 +1,5 @@
-import sys
-
 str_ffn_in = r"/home/martin/PycharmProjects/ec_ext_iso3166/data/tld_org.csv"
-str_ffn_ou = r"/home/martin/PycharmProjects/ec_ext_iso3166/src/tld.csv"
+str_ffn_ou = r"/home/martin/PycharmProjects/ec_ext_iso3166/ext_iso3166/tld.csv"
 
 if __name__ == '__main__':
 

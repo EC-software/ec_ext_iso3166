@@ -1,6 +1,6 @@
 
 str_ffn_in1 = r"/home/martin/PycharmProjects/ec_ext_iso3166/data/mid_codes.txt"
-str_ffn_in2 = r"/home/martin/PycharmProjects/ec_ext_iso3166/src/iso3166-1.csv"
+str_ffn_in2 = r"/home/martin/PycharmProjects/ec_ext_iso3166/ext_iso3166/iso3166-1.csv"
 
 if __name__ == '__main__':
 

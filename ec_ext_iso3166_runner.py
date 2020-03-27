@@ -1,25 +1,20 @@
-import pprint
-import ec_ext_iso3166
+# from ext_iso3166 import world
+import ext_iso3166
 
 """ A New Try
-After having consideres things one more time.
-What queations (functions) do we really want to ansver here ...
+After having considered things one more time.
+What questions (functions) do we really want to answer here ...
 
 Now the default object is the collection, that we can ask questions.
 """
 
 def ter_as_text(ter):
     if isinstance(ter, dict):
-        print(f"\tTER: {ter['alpha_2']}")
+        print(f"\t| TER: {ter['alpha_2']}")
         for k in sorted(ter.keys()):
-            print(f"\t     {k}: {ter[k]}")
+            print(f"\t|      {k}: {ter[k]}")
     else:
-        print("entry is not dic...")
-
-print(" ------ Welcome to test -------------")
-
-trs = ec_ext_iso3166.Territories()  # Note this returns the entire collection of countries (territories)
-print(f"The trs object: {trs}")
+        print("\t| entry is not dic...")
 
 # print(f"Dump: {trs.dump_as_text()}")
 # key_a = 'name_eng'
@@ -29,12 +24,18 @@ print(f"The trs object: {trs}")
 #         if trs._data[key_c][key_a] != trs._data[key_c][key_b]:
 #             print(f" - k: {key_c} ({key_a},{key_b}) >> {trs._data[key_c][key_a]} != {trs._data[key_c][key_b]}")
 
+print(" ------ Welcome to tests-bed -------------")
+
+trs = ext_iso3166.world.Territories()  # Note this returns the entire collection of countries (territories)
+print(f"The trs object: {trs}  <-- You should see: <ec_ext_iso3166.Territories object at ...>")
+
 print(f"Sorted categories: {trs.categories()}")
-print(f"Orderd categories: {ec_ext_iso3166.order_iso3166_keys(trs.categories())}")
+print(f"Orderd categories: {ext_iso3166.world.order_iso3166_keys(trs.categories())}")
 print(f"Missing values: {trs.list_missing_values()}")
 
 token = "DK"
 ter_dk = trs.get(token)  # Get a specific territory by primary key
+print(f"What: {str(type(ter_dk))}")
 print(f"get({token}) = {ter_as_text(ter_dk)}")
 
 token = "AQ"
@@ -47,7 +48,7 @@ print(f"get({token}) = {ter_as_text(ter_x)}")
 # lst_ters3 = trs.find(['Ro', 'Pa'], ['capital'])  # Italy, France
 # lst_ters3 = trs.find(['Douglas'], ['capital'])  # multiple?
 # lst_ters3 = trs.find(['Brades'], ['capital'])  # has 3 capitols
-# test "French Southern Territories" >> "Saint-Pierre, Réunion"
+# tests "French Southern Territories" >> "Saint-Pierre, Réunion"
 
 
 

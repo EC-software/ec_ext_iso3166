@@ -4,6 +4,7 @@
 # useful format. I've done so here for converting the Wikipedia country code list into a CSV:
 
 import csv
+
 import urllib3
 from bs4 import BeautifulSoup
 
