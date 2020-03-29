@@ -1,6 +1,3 @@
-# with open('name_short_en__wiki.csv', 'r') as log_file_fh:
-#     for line in log_file_fh:
-#         print(line)
 
 lin = 0
 pos = 0

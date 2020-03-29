@@ -1,4 +1,5 @@
 # import shlex  # Won't work with e.g. line: "AF, AFG, 004, Afghanistan, Afghanistan (l')"
+import csv
 import logging
 import os
 
@@ -26,23 +27,26 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 """
 
 # ToDo: Clean up the many searchers, what's supposed to be the difference between guess() and find()
+# ToDo: Consider:
+""" EmployeeRecord = namedtuple('EmployeeRecord', 'name, age, title, department, paygrade')
+    import csv
+    for emp in map(EmployeeRecord._make, csv.reader(open("employees.csv", "rb"))):
+        print(emp.name, emp.title)"""
 #   Idea: All will: Always search ISO 3166 first, but
+#   function name x(), .returns, [] returns etc
+#       - First and foremost, tries to be compatible with iso3166
 #   guess():
 #       - Never return multiple hits (that would't be a guess, would it?)
-#   locate():
-#       - First and foremost, tries to be compatible with
 #   find():
-#       - Allow for multiple returns, somehow...
+#       - Allow for multiple returns, somehow... always return list, to minimise confusion.
 #       - Allow search to target specific keys, e.g. 'capital' = 'Rome'
 # ToDo: Make search by number (as int) work
 # ToDo: Write Test Class :-)
-# ToDo: Consider changing from .csv to .json  Pro.: A number of errors disappears, Con.: Less comments possible
 # ToDo: Consider exploring one or more of the following:
-#   https://pypi.org/project/iso3166/
+#   https://pypi.org/project/iso3166/  <------------- Try be compatible with this !!!
+#   https://en.wikipedia.org/wiki/Lists_of_country_codes
 #   https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 #   https://salsa.debian.org/iso-codes-team/iso-codes/-/tree/master/data
-#   https://pypi.org/project/pycountry/  -- webpage of 'pycountry'
-#   https://github.com/flyingcircusio/pycountry  -- repo of 'pycountry'
 #   https://datahub.io/core/country-list#python
 
 log.debug("> main()")
@@ -84,30 +88,30 @@ def order_iso3166_keys(lst_keys):
         return lst_keys  # if it's not a list, just return it untouched...
 
 
-def _line_to_list(str_lin, sep=',', qot='"'):
-    """ Split a text line in list of tokens
-    Split at every occurrence of sep, but obeys qot as quotes, that wont be split.
-    :param str_lin:
-    :param sep:
-    :param qot:
-    :return: list
-    """
-    lst_tmp = str_lin.split(qot)
-    lst_ret = list()
-    for n in range(len(lst_tmp)):
-        if n % 2 == 1:  # it was originally quoted
-            lst_tmp[n] = f'"{lst_tmp[n]}"'  # re-insert the qot chars for later identification
-            lst_tmp[n-1] = lst_tmp[n-1].strip().rstrip(',').strip()  # remove excessive sep terminating prior token
-    lst_tmp = [tok for tok in lst_tmp if tok != '']  # remove the empty tokens, creates by 'sep qot' sequences
-    # At this point no tokens should start or end with sep, but n=2 do if line starts with a qot, so...
-    lst_tmp = [tok.strip(sep) for tok in lst_tmp]
-    # Now split with sep
-    for itm in lst_tmp:
-        if itm[0] == qot:
-            lst_ret.append(itm.strip(qot))  # add the item, but loose the quotes
-        else:
-            lst_ret.extend([foo.strip() for foo in itm.split(sep)])  # split and add each element
-    return lst_ret
+# def _line_to_list(str_lin, sep=',', qot='"'):
+#     """ Split a text line in list of tokens
+#     Split at every occurrence of sep, but obeys qot as quotes, that wont be split.
+#     :param str_lin:
+#     :param sep:
+#     :param qot:
+#     :return: list
+#     """
+#     lst_tmp = str_lin.split(qot)
+#     lst_ret = list()
+#     for n in range(len(lst_tmp)):
+#         if n % 2 == 1:  # it was originally quoted
+#             lst_tmp[n] = f'"{lst_tmp[n]}"'  # re-insert the qot chars for later identification
+#             lst_tmp[n-1] = lst_tmp[n-1].strip().rstrip(',').strip()  # remove excessive sep terminating prior token
+#     lst_tmp = [tok for tok in lst_tmp if tok != '']  # remove the empty tokens, creates by 'sep qot' sequences
+#     # At this point no tokens should start or end with sep, but n=2 do if line starts with a qot, so...
+#     lst_tmp = [tok.strip(sep) for tok in lst_tmp]
+#     # Now split with sep
+#     for itm in lst_tmp:
+#         if itm[0] == qot:
+#             lst_ret.append(itm.strip(qot))  # add the item, but loose the quotes
+#         else:
+#             lst_ret.extend([foo.strip() for foo in itm.split(sep)])  # split and add each element
+#     return lst_ret
 
 
 def _add_ext_key(dic_in, lst_hdr, lst_new):
@@ -154,44 +158,62 @@ class Territories:
         self._loaddata()
 
     def _loaddata(self):
-        """ Read in the basic ISO 3166-1 data, and the extended data, from the .csv files """
-        str_fn_iso3166 = r"iso3166_ext/data/iso3166-1.csv"  # file name for the basic ISO 3166 file
-        log.info(f"loading file: {str_fn_iso3166}")
-        sep = ','  # assumed separator in this file
-        qot = '"'  # assumed quoting character in this file
+        """ Read in the basic ISO 3166-1 data, and the extended data, from the .tab files """
+
+        def decomment(csvfile):
+            for row in csvfile:
+                raw = row.split('#')[0].strip()
+                if raw: yield raw
+
+        log.info(f"Start Loading base iso-3166-1")
+        str_fn_iso3166 = r"iso3166_ext/data/iso3166-1.tab"  # file name for the basic ISO 3166 file
+        log.info(f"Start reading file: {str_fn_iso3166}")
         dic_iso3166 = dict()
-        with open(str_fn_iso3166, 'r') as fil_iso3166:
-            num_cnt = 0
-            for line in fil_iso3166:
-                line = line.split('#')[0].strip()  # Skip all comments, and spaces
-                if len(line) > 0:
-                    lst_in = _line_to_list(line, sep, qot)
-                    if num_cnt == 0:  # Assumed to be the header
-                        lst_head = lst_in
+        num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
+        num_col = 0  # Number of fields, assumed 0 until we see the header
+        with open(str_fn_iso3166) as fil_iso3166:
+            for lst_lin in csv.reader(decomment(fil_iso3166), delimiter="\t"):  # You can also use dialect="excel-tab"
+                #log.debug(lst_lin)
+                if num_row == 0:  # assume this to be the header
+                    lst_head = lst_lin
+                    num_col = len(lst_head)
+                    lst_ids_required = ['alpha_2', 'alpha_3', 'numeric_3']
+                    if all([tok in lst_head for tok in lst_ids_required]):  # Header is ID-complete
+                        pass
                     else:
-                        str_num = lst_in[0]  # Note: We assume the first column to be the Alpha-2 id.
-                        if str_num not in dic_iso3166.keys():
-                            dic_iso3166[str_num] = dict()
-                            for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
-                                dic_iso3166[str_num][lst_head[n]] = lst_in[n]
-                        else:
-                            raise ValueError(f"key: {str_num} already exist - First column in file {str_fn_iso3166} must have unique values ...")
-                    num_cnt += 1
+                        str_msg = f"ERR: Header in file: {str_fn_iso3166} do not contain all items in {lst_ids_required}"
+                        log.error(str_msg)
+                        raise Exception(str_msg)
+                else:
+                    str_num = lst_lin[0]  # Note: We assume the first column to be the Alpha-2 id.
+                    if str_num not in dic_iso3166.keys():
+                        dic_iso3166[str_num] = dict()
+                        for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
+                            dic_iso3166[str_num][lst_head[n]] = lst_lin[n]
+                    else:
+                        str_msg = f"key: {str_num} already exist - First column in file {str_fn_iso3166} must have unique values ..."
+                        log.error(str_msg)
+                        raise ValueError(str_msg)
+                num_row += 1
+            str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # remember the dir ...
+            log.info(f"Done: reading file: {str_fn_iso3166}")
+
         self._data = dic_iso3166
-        log.info(f"Done reading base iso-3166-1 for {len(self._data)} territories")
+        log.info(f"Done: Loading base iso-3166-1 for {len(self._data)} territories")
 
         str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # Use this place to look for other .csv files later
 
         # Read the additional .csv files. NOTE: This is where the EC Extendable comes from !!!
+        log.info(f"Start Loading Extented iso-3166-1 info ...")
         for root, dirs, files in os.walk(str_root_path):
             for name in files:
-                if (name.endswith(".csv")) and ('iso3166-1.csv' not in name):  # We all ready handled iso3166-1.csv
-                    log.info(f" + Extending base iso-3166-1 with: {os.path.join(root, name)}")
-                    if 'capitals' in name:
-                        log.debug("hit")
+                if (name.endswith(".tab")) and ('iso3166-1.tab' not in name):  # We all ready handled iso3166-1.csv
+                    log.info(f"Start reading file: {os.path.join(root, name)}")
+                    # print(f"file: {name}")
                     num_cnt = 0
                     with open(os.path.join(root, name), 'r') as fil_ex:
                         for line in fil_ex:
+                            # print(line.strip())
                             data = line.split('#', 1)[0]
                             if ',' in data:
                                 lst_in = _line_to_list(data, sep, qot)
