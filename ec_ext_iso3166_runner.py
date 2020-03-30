@@ -18,12 +18,12 @@ Now the default object is the collection, that we can ask questions.
 #             print(f" - k: {key_c} ({key_a},{key_b}) >> {trs._data[key_c][key_a]} != {trs._data[key_c][key_b]}")
 
 print(" ------ Welcome to tests-bed -------------")
-print(iso3166_ext.root_dir)
-trs = iso3166_ext.world.Territories()  # Note this returns the entire collection of countries (territories)
-print(f"The trs object: {trs}  <-- You should see: <ec_ext_iso3166.Territories object at ...>")
+print(f"data root dir: {iso3166_ext.root_dir}")
+trs = iso3166_ext.Territories()  # Note this returns the entire collection of countries (territories)
+print(f"Done building Territories: {trs}")
 
 print(f"Sorted categories: {trs.categories()}")
-print(f"Orderd categories: {iso3166_ext.world.order_iso3166_keys(trs.categories())}")
+print(f"Orderd categories: {iso3166_ext.order_iso3166_keys(trs.categories())}")
 print(f"Missing values: {trs.list_missing_values()}")
 
 token = "DK"

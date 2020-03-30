@@ -3,6 +3,8 @@
 
 _ECsoftware's iso3166_ext module_
 
+remember to update `__version__` in `__init__.py`
+
 #### ver. 0.0.2
 
 _Changing to .tab March 2020_

@@ -5,11 +5,9 @@
     from: EC-software """
 
 import os  # Needed for definition of root_dir
-import iso3166_ext.world  # import this module on package import
+from iso3166_ext.world import *  # import this module on package import
 
-# print(f'Invoking __init__.py for {__name__}')
-
-__version__ = "0.0.1"  # Version of the iso3166_ext package
+__version__ = "0.0.2"  # Version of the iso3166_ext package
 __all__ = ['world']  # import these modules on package import *
 
 # The root path of this package, for later reference, I think ...

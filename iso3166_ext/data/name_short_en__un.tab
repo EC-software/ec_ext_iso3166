@@ -1,7 +1,7 @@
 # source: https://unstats.un.org/unsd/tradekb/knowledgebase/country-code
 # ISO 3166-1 alpha-3
 # The following is a complete list of the current officially assigned ISO 3166-1 alpha-3 codes,
-using the English short country names officially used by the ISO 3166 Maintenance Agency (ISO 3166/MA):[4]
+# using the English short country names officially used by the ISO 3166 Maintenance Agency (ISO 3166/MA):[4]
 # http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3,
 alpha_3	name_short_en
 ABW	Aruba

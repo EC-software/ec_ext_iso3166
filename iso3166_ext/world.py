@@ -63,21 +63,22 @@ STR_FFN_ISO3166 = STR_ROOT_PATH + "iso3166-1.tab"  # file name for the basic ISO
 # source: https://www.iso.org/obp/ui/#iso:std:iso:3166:-1:ed-3:v1:en,fr
 # source: https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 # source: https://www.iso.org/obp/ui/#search
-ISO_3166_1_KEYS = ["alpha_2",  # "alpha-2",  #  a two-letter code that represents a country name, recommended as the general purpose code
-                   "name_short",  # name_short_en?, name_short_fr?
-                   # "name_short_lower_case", -- Not in use in ec_ext_iso3166
-                   # "name_short_uppercase_en", -- Not in use in ec_ext_iso3166
-                   "name_full",  # name_full_en?
-                   "alpha_3",  # "alpha-3",  # a three-letter code that represents a country name, which is usually more closely related to the country name
-                   "alpha-4",  # a four-letter code that represents a country name that is no longer in use. The structure depends on the reason why the country name was removed from ISO 3166-1 and added to ISO 3166-3Valid for few entries, e.g. 'AN'
-                   "numeric_3",  # "numeric-3",
-                   "remarks",
-                   "independent",
-                   "territory_name",
-                   "status",
-                   "status_remark"]
+ISO_3166_1_KEYS = ['alpha_2',  # 'alpha-2',  #  a two-letter code that represents a country name, recommended as the general purpose code
+                   'name_short',  # name_short_en?, name_short_fr?
+                   # 'name_short_lower_case', -- Not in use in ec_ext_iso3166
+                   # 'name_short_uppercase_en', -- Not in use in ec_ext_iso3166
+                   'name_full',  # name_full_en?
+                   'alpha_3',  # 'alpha-3',  # a three-letter code that represents a country name, which is usually more closely related to the country name
+                   'alpha-4',  # a four-letter code that represents a country name that is no longer in use. The structure depends on the reason why the country name was removed from ISO 3166-1 and added to ISO 3166-3Valid for few entries, e.g. 'AN'
+                   'numeric_3',  # 'numeric-3',
+                   'remarks',
+                   'independent',
+                   'territory_name',
+                   'status',
+                   'status_remark']
 
-IDS_REQUIRED = ['alpha_2', 'alpha_3', 'numeric_3']
+IDS_REQUIRED = ['alpha_2', 'alpha_3', 'numeric_3']  # All Territory should have valid values for these key ID fields.
+ID_PREFERRED = 'alpha_2'  # Any required ID could potentially take this place, but this one have been selected!
 
 
 def order_iso3166_keys(lst_keys):
@@ -94,79 +95,74 @@ def order_iso3166_keys(lst_keys):
         return lst_keys  # if it's not a list, just return it untouched...
 
 
-def _add_ext_key_old(dic_in, lst_hdr, lst_new):
-    """ Adds Extended Key to the Territories
-    lst_hdr are the keys, and lst_new are the values.
-    In the dic_in, find the entry with key_on == val_on.
-    Add to this entry a new key key_new, with value val_new.
-    If key_new all-ready exist, make it a list and append the new value.
-    If no entry with key_on == val_on, do nothing. """
-    key_on = lst_hdr[0].strip()
-    val_on = lst_new[0].strip()
-    key_in = lst_hdr[1].strip()
-    val_in = lst_new[1].strip()
-    if any(['.nu' in slot for slot in [key_on, val_on, key_in, val_in]]):
-        log.debug(f"<{lst_hdr} : {lst_new}>")
-    bol_found = False
-    if all([len(tok) > 0 for tok in [key_on, val_on, key_in, val_in]]):  # We have 4 valid entries
-        # print("Add_kv({}:{}) on ({}:{})".format(key_in, val_in, key_on, val_on))
-        for key_te in dic_in.keys():  # Loop the Territories
-            if (key_on in dic_in[key_te].keys()) and (dic_in[key_te][key_on] == val_on):  # We have found the 'on'
-                # print(f" on: {dic_in[key_te]}")
-                terr_upd = dic_in[key_te]
-                if key_in in terr_upd.keys():  # The 'new' key all-ready exists
-                    if isinstance(terr_upd[key_in], list):  # It's all-ready a list, append.
-                        if val_in not in terr_upd[key_in]:
-                            terr_upd[key_in].append(val_in)
-                    else:  # If value is new, make a list
-                        if val_in != terr_upd[key_in]:
-                            terr_upd[key_in] = [terr_upd[key_in], val_in]
-                else:
-                    terr_upd[key_in] = val_in
-                dic_in[key_te] = terr_upd  # Put the updated territory back
-                bol_found = True
-                break  # We can't continue the loop, as we have changed dic_in
-        if not bol_found:
-            log.warning(f" -- Filed to find an 'ON' for {key_on}: {val_on} << {key_in} = {val_in}")
-    return dic_in
-
-
 class Territory:
     """ A single territory, like Greece, Antarctica, Virgin Islands or the Vatican state. """
 
+    # ToDo: Consider functions to Update and/or Delete values of a Territory
+
     def __init__(self, lst_head, lst_vals):
         """ Create a single territory from two lists. """
+        ##print(lst_head, lst_vals)
         self._data = dict()
         if len(lst_head) == len(set(list(lst_head))):  # Values in header must be unique
             if len(lst_head) == len(lst_vals):  # number of keys and values must match
                 for n in range(len(lst_head)):
                     self._data[lst_head[n]] = lst_vals[n]
-        print(f"cnf.: {self._data}")
+        ##print(f"cnf.: {self._data}")
 
     def add_ext_key(self, lst_head, lst_vals):
         """ Add one or more key-val sets to the Territory, based on an existing primary key.
-        First key in lst_head must be a valid Prim. key. """
-        pass
+        First key in lst_head must be a valid Prim. key. - but that is a property of the entire Territories instance.
+        First key also have to be amongst the existing keys, and we can check that. """
+        if lst_head[0] in self.keys():
+            for n in range(len(lst_head)):
+                if n > 0:  # don't update the prim. key
+                    if lst_head[n] not in self.keys():  # it's a brand new key, just put it in
+                        self._data[lst_head[n]] = lst_vals[n]
+                    else:  # key already exists, we need a list
+                        if isinstance(self._data[lst_head[n]], list):  # it's already a list
+                            lst_val = self._data[lst_head[n]]
+                        else:  # we put existing value in a list
+                            lst_val = [self._data[lst_head[n]]]
+                        lst_val.append(lst_vals[n])  # we add the new value to the list
+                        self._data[lst_head[n]] = lst_val  # return the updated list to data collection
+        else:
+            log.warning(f"add_ext_key() can't add, if first key: {lst_head[0]} "
+                        f"is not an primary key for the Territory: {self.keys()}")
 
     def keys(self):
         """ Return a list of all keys known to the class """
         return self._data.keys()
 
+    def values(self):
+        """ Return a list of all values from the class """
+        return self._data.values()
+
+    def get(self, str_key):
+        if str_key in self.keys():
+            return self._data[str_key]
+        else:
+            log.warning(f"get() can't deliver, because key: {str_key} is not in keys(): {self.keys()}")
+
     def as_text(self):
         str_ret = str()  # Initialising the return object
         ter = self._data
-        str_ret += f"\tTER: {ter['alpha_2']}\n"
+        str_ret += f"\tTER: {ter[ID_PREFERRED]}\n"
         for k in sorted(ter.keys()):
             str_ret += f"\t\t{k}: {ter[k]}\n"
         return str_ret.strip()
 
 class Territories:
-    """ Territories are generally Countries, but also include e.g. Antarctica, Virgin Islands, Vatican state, etc. """
+    """ Territories (plural) is a collection of Territory-objects.
+    Territory-objects are generally Countries, but also include e.g. Antarctica, Virgin Islands, Vatican state, etc. """
 
     def __init__(self):
-        self._lst_pk = list()  # List of validated primary keys
         self._data = dict()  # We use a dict(), not a tuple, as we need to modify it
-        self._load_data()  # Load data from the .tab files
+        self._lst_k = list()  # Initialise list of keys present in any Territory object
+        self._lst_pk = list()  # Initialise list of validated primary keys
+        self._load_data()  # Load the data files
+        self._update_inner_k()
+        self._update_inner_pk()
 
     def _load_data(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .tab files """
@@ -181,7 +177,7 @@ class Territories:
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
             num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
             with open(STR_FFN_ISO3166) as fil_iso3166:
-                for lst_lin in csv.reader(_decomment(fil_iso3166), delimiter="\t"):
+                for lst_lin in csv.reader(_decomment(fil_iso3166), delimiter='\t'):
                     # log.debug(lst_lin)
                     if num_row == 0:  # assume this to be the header
                         lst_head = lst_lin
@@ -203,34 +199,37 @@ class Territories:
                             log.error(str_msg)
                             raise ValueError(str_msg)
                     num_row += 1
-            # Establish and confirm primary keys by looking at all 'prime key candidates'
-            for str_pkc in lst_head:
-                pass
+            # Establish and confirm inner primary keys by looking at all 'inner prime key candidates'
+            self._update_inner_pk()
+            log.debug(f"x1 inner_k  {self.inner_keys()}")
+            log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
+            log.debug(f"x1 keys1: {sorted(self.keys())}")
+            log.debug(f"x1 keys2: {sorted([tok for tok in self.keys() if len(tok) != 2])}")
 
         def _read_xtnd_file(str_fn):
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
             num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
             with open(str_fn) as fil_xtnd:
-                for lst_lin in csv.reader(_decomment(fil_xtnd), delimiter="\t"):
-                    log.debug(lst_lin)
+                for lst_lin in csv.reader(_decomment(fil_xtnd), delimiter='\t'):
+                    log.debug(f"xtnd_line: {lst_lin}")
                     if num_row == 0:  # assume this to be the header
-                        lst_head = lst_lin
-                        if lst_head[0] not in self.prim_keys():  # First column must be existing, valid prim. key.
+                        lst_head = [tok.strip() for tok in lst_lin]  # trip whitespaces
+                        tmp_val_prim = self.inner_prim_keys()
+                        if lst_head[0] not in tmp_val_prim:  # First column must be existing, valid prim. key.
                             log.warning(f"Warning: First key (column): {lst_head[0]} "
                                         f"in file: {str_fn} is not a valid prim. key, at this time ...")
                             return str_fn
+                        str_msg = f"accepted header: {lst_head}"
+                        log.info(str_msg)
+                        print(str_msg)
                     else:
-                        self._add_ext_key(lst_head, lst_lin)
-                        # str_first_key = lst_lin[0]  # assume the first column to be the Alpha-2 id.
-                        # if str_first_key not in self._data.keys():
-                        #     self._data[str_first_key] = dict()
-                        #     for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
-                        #         self._data[str_first_key][lst_head[n]] = lst_lin[n]
-                        # else:
-                        #     str_msg = f"key: {str_first_key} already exist - First column in file {STR_FFN_ISO3166} must have unique values ..."
-                        #     log.error(str_msg)
-                        #     raise ValueError(str_msg)
+                        self._add_ext_key(lst_head, [tok.strip() for tok in lst_lin])  # add while trimming whitespaces
                     num_row += 1
+            self._update_inner_pk()
+            log.debug(f"x2 inner_k  {self.inner_keys()}")
+            log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
+            log.debug(f"x2 keys1: {sorted(self.keys())}")
+            log.debug(f"x2 keys2: {sorted([tok for tok in self.keys() if len(tok) != 2])}")
             return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
@@ -238,7 +237,7 @@ class Territories:
         _read_base_file()  # Will load the base file into self._data
         log.info(f"Done: reading file: {STR_FFN_ISO3166}")
 
-        print(f"debug: post iso3166-1.tab\t> {self._data['GB']}")
+        print(f"debug: post iso3166-1.tab\t-> {self._data['GB'].as_text()}")
 
         # Read the additional .tab files. NOTE: This is where the Extendable comes from !!!
         log.info(f"Start Loading Extended iso-3166-1 info ...")
@@ -247,33 +246,67 @@ class Territories:
                 if (str_fn.endswith(".tab")) and ('iso3166-1.tab' not in str_fn):  # We all ready handled iso3166-1.csv
                     str_ffn = os.path.join(root, str_fn)
                     log.info(f"Start reading file: {str_fn}")
-                    print(f"EXT file: {str_ffn}")
                     _read_xtnd_file(str_ffn)
-                    # num_cnt = 0
-                    # with open(os.path.join(root, str_fn), 'r') as fil_ex:
-                    #     for line in fil_ex:
-                    #         # print(line.strip())
-                    #         data = line.split('#', 1)[0]
-                    #         if ',' in data:
-                    #             lst_in = _line_to_list(data, sep, qot)
-                    #             if num_cnt == 0:  # Header line
-                    #                 lst_head = lst_in
-                    #             else:
-                    #                 dic_iso3166 = _add_ext_key(dic_iso3166, lst_head, lst_in)
-                    #             num_cnt += 1
                     log.info(f"Done: reading file: {os.path.join(root, str_fn)}")
-                    print(f"debug: post {str_fn}\t> {self._data['GB']}")
+
+                    print(f"debug: post {str_fn}\t-> {self._data['GB'].as_text()}")
 
         log.info(f"Done: Loading base iso-3166-1 for {len(self._data)} territories")
 
-    def _add_ext_key(self, lst_head, lst_keva):
-        """ Add new key(s) to a territory.
-        Do the hard work by calling the territory's own add function. """
-        ter = self._data[lst_head[0]]
-        ter = ter.add_ect_key(lst_head, lst_keva)
-        self._data[lst_head[0]] = ter
+    def keys(self):
+        """ Return list of all keys, i.e. list of the ID_PREFERRED for each Territory-obj. in Territories """
+        return self._data.keys()
 
-    def prim_keys(self):
+    def _update_inner_k(self):
+        """ Update self._lst_k """
+        set_k = set()  # Initialise set of all keys
+        for key_ter in self.keys():
+            ter = self._data[key_ter]
+            for key_t in ter.keys():
+                set_k.add(key_t)
+        self._lst_k = list(set_k)
+
+    def _update_inner_pk(self):
+        """ Update list of Validated Primary keys.
+        For a key to qualify, it must:
+        1) be represented, with a non-empty value, in all member Territory objects
+        2) hold a unique value for every Territory objects, i.e. no two Territory objects can have the same value. """
+        
+        def empty(itm):
+            if not itm or itm == '' or itm == 0 or itm == []:
+                return True
+            else:
+                return False
+
+        self._update_inner_k()  # Always make sure self._lst_k is up-to-date
+        set_ppk = set(self._lst_k)  # Any candidate key is a ppk (potential primary key), until proven otherwise
+        for ppk in list(set_ppk):  # make a list from the set, to avoid editing the set while loping it
+            lst_val = list()  # Initialise list of values, for this ppk
+            for key_ter in self.keys():  # test that all Territory objects have the key
+                ter = self._data[key_ter]
+                if ppk not in ter.keys() or empty(ter.get(ppk)):
+                    set_ppk.discard(ppk)
+                    break  # No need to look further, ppk is dis-qualified
+                else:
+                    lst_val.append(ter.get(ppk))
+            if len(list(set(lst_val))) != len(self.keys()):  # test that all values are unique
+                set_ppk.discard(ppk)
+        self._lst_pk = list(set_ppk)  # update the _lst_pk value on self.
+
+    def _add_ext_key(self, lst_keys, lst_vals):
+        """ Add new key(s) to a territory.
+        Do the hard work by calling the territory's own add function.
+        It should have been checked beforehand that lst_keys[0] is a valid prim. key, since this will run for each line.
+        """
+        print(f"addextkey: keys: {lst_keys}, vals: {lst_vals}")
+        ter = self.guess(lst_vals[0], categories=[lst_keys[0]])  # Guess will be unique, because lst_keys[0] is a valid prim. key!
+        ter = ter.add_ext_key(lst_keys, lst_vals)
+        self._data[lst_keys[0]] = ter
+
+    def inner_keys(self):
+        return self._lst_k
+
+    def inner_prim_keys(self):
         return self._lst_pk
 
     def dump_as_text(self):
@@ -284,7 +317,7 @@ class Territories:
         str_ret = str()
         for key_t in sorted(self._data.keys()):
             ter = self._data[key_t]
-            str_ret += f"\nTER: {ter['alpha_2']}"
+            str_ret += f"\nTER: {ter[ID_PREFERRED]}"
             # for k in sorted(ter.keys()):
             for k in order_iso3166_keys(ter.keys()):
                 str_ret += f"\n     {k}: {ter[k]}"
@@ -294,7 +327,6 @@ class Territories:
         """ Return a dictionary with the territory information for territory with alpha-2 = id
         if id don't exist, then return None. """
         if str_id in self._data.keys():
-            log.warning(f"Found: {str_id} in self-data")
             return self._data[str_id]
         else:
             log.warning(f"Can't find: {str_id} in self-data")
@@ -319,18 +351,45 @@ class Territories:
                 lst_ret.append((ter, lst_miss))
         return lst_ret
 
-    def find(self, token, category=""):
+    def find(self, token, categories=[]):
         """ Allows for multiple returns, therefore always return a list.
         If no match is found for token it returns an empty list.
-        Allow for
+        Allow for categories ...
+        ToDo: Find a better word for categories
+        :param token: str: The phrase to look for
+        :param categories: list: If non-empty, limit the search to these fields
+        :return: a list of Territory object, that meet the criteria. The list can be empty
         """
+        ##print(f"find: tok: {token}, cat: {categories}")
+        lst_ret = list()  # Initialise the return object
+        if len(categories) == 0:
+            cats = set(self.inner_keys())
+        else:
+            cats = set(categories)
+        ##print(f"find:   cats: {cats}")
+        for key_ter in self.keys():  # for each Territory key in Territories
+            ##print(f"find:   keyt: {key_ter}")
+            ter = self.get(key_ter)
+            for cat in (cats & set(ter.keys())):  # the intersection of the two sets
+                if ter.get(cat) == token:
+                    lst_ret.append(self.get(key_ter))
+                    break  # No reason to test more categories
+        ##print(f"find: ret: {lst_ret}")
+        return lst_ret
 
-    def guess(self, token):
+    def guess(self, token, categories):
         """ So far this is implemented as a .find()
         that returns the first element in the list, not the whole list.
         For this reason it should maintain the same parameters as find. """
-        for ter in self._data:
-            pass
+        # ToDo: Consider return self.find(token, category)[:0] or something, to make it all a one-liner
+        print(f"guess: tok: {token}, cat: {categories}")
+        lst_suggestion = self.find(token, categories)
+        if len(lst_suggestion) > 0:
+            print(f"guess: ret: {lst_suggestion[0]}")
+            return lst_suggestion[0]
+        else:
+            print(f"guess: ret: []")
+            return []
 
 
 log.debug("< main()")
