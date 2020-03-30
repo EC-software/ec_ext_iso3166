@@ -8,13 +8,6 @@ What questions (functions) do we really want to answer here ...
 Now the default object is the collection, that we can ask questions.
 """
 
-def ter_as_text(ter):
-    if isinstance(ter, dict):
-        print(f"\t| TER: {ter['alpha_2']}")
-        for k in sorted(ter.keys()):
-            print(f"\t|      {k}: {ter[k]}")
-    else:
-        print("\t| entry is not dic...")
 
 # print(f"Dump: {trs.dump_as_text()}")
 # key_a = 'name_eng'
@@ -36,11 +29,11 @@ print(f"Missing values: {trs.list_missing_values()}")
 token = "DK"
 ter_dk = trs.get(token)  # Get a specific territory by primary key
 print(f"What: {str(type(ter_dk))}")
-print(f"get({token}) = {ter_as_text(ter_dk)}")
+print(f"get({token}) = {ter_dk.as_text()}")
 
 token = "AQ"
 ter_x = trs.get(token)  # Get a specific territory by primary key
-print(f"get({token}) = {ter_as_text(ter_x)}")
+print(f"get({token}) = {ter_x.as_text()}")
 #
 # lst_ters1 = trs.find('Rom')  # Allow for multiple returns. Romanina, Italy, ?
 # lst_ters2 = trs.find('Rome', ['capital'])  # and. Allow search to target specific keys, e.g. 'capital' = 'Rome'

@@ -204,3 +204,4 @@ fabric.properties
 
 .idea/.gitignore
 /.idea/
+/iso3166_ext/data/exotic_name_languages.7z

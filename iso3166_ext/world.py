@@ -53,6 +53,10 @@ log.debug("> main()")
 
 # CONSTANTS
 
+# The module will try to use all .tab files in the root data dictionary, and any sud-dictionary
+STR_ROOT_PATH = r"iso3166_ext/data/"  # root dictionary for the data files, including the user-made files
+STR_FFN_ISO3166 = STR_ROOT_PATH + "iso3166-1.tab"  # file name for the basic ISO 3166 file - leave this one as it is ...
+
 # ISO_3166_1_KEYS - It is not as standard as you would think, which keys belongs to a ISO 3166-1 record :-(
 # source: https://www.iso.org/glossary-for-iso-3166.html
 # source: https://www.iso.org/obp/ui/#iso:code:3166:AD
@@ -73,6 +77,8 @@ ISO_3166_1_KEYS = ["alpha_2",  # "alpha-2",  #  a two-letter code that represent
                    "status",
                    "status_remark"]
 
+IDS_REQUIRED = ['alpha_2', 'alpha_3', 'numeric_3']
+
 
 def order_iso3166_keys(lst_keys):
     """ Order the given keys alphabetically
@@ -88,33 +94,7 @@ def order_iso3166_keys(lst_keys):
         return lst_keys  # if it's not a list, just return it untouched...
 
 
-# def _line_to_list(str_lin, sep=',', qot='"'):
-#     """ Split a text line in list of tokens
-#     Split at every occurrence of sep, but obeys qot as quotes, that wont be split.
-#     :param str_lin:
-#     :param sep:
-#     :param qot:
-#     :return: list
-#     """
-#     lst_tmp = str_lin.split(qot)
-#     lst_ret = list()
-#     for n in range(len(lst_tmp)):
-#         if n % 2 == 1:  # it was originally quoted
-#             lst_tmp[n] = f'"{lst_tmp[n]}"'  # re-insert the qot chars for later identification
-#             lst_tmp[n-1] = lst_tmp[n-1].strip().rstrip(',').strip()  # remove excessive sep terminating prior token
-#     lst_tmp = [tok for tok in lst_tmp if tok != '']  # remove the empty tokens, creates by 'sep qot' sequences
-#     # At this point no tokens should start or end with sep, but n=2 do if line starts with a qot, so...
-#     lst_tmp = [tok.strip(sep) for tok in lst_tmp]
-#     # Now split with sep
-#     for itm in lst_tmp:
-#         if itm[0] == qot:
-#             lst_ret.append(itm.strip(qot))  # add the item, but loose the quotes
-#         else:
-#             lst_ret.extend([foo.strip() for foo in itm.split(sep)])  # split and add each element
-#     return lst_ret
-
-
-def _add_ext_key(dic_in, lst_hdr, lst_new):
+def _add_ext_key_old(dic_in, lst_hdr, lst_new):
     """ Adds Extended Key to the Territories
     lst_hdr are the keys, and lst_new are the values.
     In the dic_in, find the entry with key_on == val_on.
@@ -151,80 +131,150 @@ def _add_ext_key(dic_in, lst_hdr, lst_new):
     return dic_in
 
 
+class Territory:
+    """ A single territory, like Greece, Antarctica, Virgin Islands or the Vatican state. """
+
+    def __init__(self, lst_head, lst_vals):
+        """ Create a single territory from two lists. """
+        self._data = dict()
+        if len(lst_head) == len(set(list(lst_head))):  # Values in header must be unique
+            if len(lst_head) == len(lst_vals):  # number of keys and values must match
+                for n in range(len(lst_head)):
+                    self._data[lst_head[n]] = lst_vals[n]
+        print(f"cnf.: {self._data}")
+
+    def add_ext_key(self, lst_head, lst_vals):
+        """ Add one or more key-val sets to the Territory, based on an existing primary key.
+        First key in lst_head must be a valid Prim. key. """
+        pass
+
+    def keys(self):
+        """ Return a list of all keys known to the class """
+        return self._data.keys()
+
+    def as_text(self):
+        str_ret = str()  # Initialising the return object
+        ter = self._data
+        str_ret += f"\tTER: {ter['alpha_2']}\n"
+        for k in sorted(ter.keys()):
+            str_ret += f"\t\t{k}: {ter[k]}\n"
+        return str_ret.strip()
+
 class Territories:
     """ Territories are generally Countries, but also include e.g. Antarctica, Virgin Islands, Vatican state, etc. """
 
     def __init__(self):
-        self._loaddata()
+        self._lst_pk = list()  # List of validated primary keys
+        self._data = dict()  # We use a dict(), not a tuple, as we need to modify it
+        self._load_data()  # Load data from the .tab files
 
-    def _loaddata(self):
+    def _load_data(self):
         """ Read in the basic ISO 3166-1 data, and the extended data, from the .tab files """
 
-        def decomment(csvfile):
+        def _decomment(csvfile):
             for row in csvfile:
                 raw = row.split('#')[0].strip()
-                if raw: yield raw
+                if raw:
+                    yield raw
+
+        def _read_base_file():
+            num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
+            num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
+            with open(STR_FFN_ISO3166) as fil_iso3166:
+                for lst_lin in csv.reader(_decomment(fil_iso3166), delimiter="\t"):
+                    # log.debug(lst_lin)
+                    if num_row == 0:  # assume this to be the header
+                        lst_head = lst_lin
+                        num_col = len(lst_head)
+                        if all([tok in lst_head for tok in IDS_REQUIRED]):  # Header is ID-complete
+                            log.info(f"Header is: {lst_head}")
+                        else:
+                            str_msg = f"ERR: Header in file: {STR_FFN_ISO3166} do not contain all items in {IDS_REQUIRED}"
+                            log.error(str_msg)
+                            raise Exception(str_msg)
+                    else:
+                        str_first_key = lst_lin[0]  # assume the first column to be the Alpha-2 id.
+                        if str_first_key not in self._data.keys():
+                            self._data[str_first_key] = Territory(lst_head, lst_lin)
+                            # for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
+                            #     self._data[str_first_key][lst_head[n]] = lst_lin[n]
+                        else:
+                            str_msg = f"key: {str_first_key} already exist - First column in file {STR_FFN_ISO3166} must have unique values ..."
+                            log.error(str_msg)
+                            raise ValueError(str_msg)
+                    num_row += 1
+            # Establish and confirm primary keys by looking at all 'prime key candidates'
+            for str_pkc in lst_head:
+                pass
+
+        def _read_xtnd_file(str_fn):
+            num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
+            num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
+            with open(str_fn) as fil_xtnd:
+                for lst_lin in csv.reader(_decomment(fil_xtnd), delimiter="\t"):
+                    log.debug(lst_lin)
+                    if num_row == 0:  # assume this to be the header
+                        lst_head = lst_lin
+                        if lst_head[0] not in self.prim_keys():  # First column must be existing, valid prim. key.
+                            log.warning(f"Warning: First key (column): {lst_head[0]} "
+                                        f"in file: {str_fn} is not a valid prim. key, at this time ...")
+                            return str_fn
+                    else:
+                        self._add_ext_key(lst_head, lst_lin)
+                        # str_first_key = lst_lin[0]  # assume the first column to be the Alpha-2 id.
+                        # if str_first_key not in self._data.keys():
+                        #     self._data[str_first_key] = dict()
+                        #     for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
+                        #         self._data[str_first_key][lst_head[n]] = lst_lin[n]
+                        # else:
+                        #     str_msg = f"key: {str_first_key} already exist - First column in file {STR_FFN_ISO3166} must have unique values ..."
+                        #     log.error(str_msg)
+                        #     raise ValueError(str_msg)
+                    num_row += 1
+            return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
-        str_fn_iso3166 = r"iso3166_ext/data/iso3166-1.tab"  # file name for the basic ISO 3166 file
-        log.info(f"Start reading file: {str_fn_iso3166}")
-        dic_iso3166 = dict()
-        num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
-        num_col = 0  # Number of fields, assumed 0 until we see the header
-        with open(str_fn_iso3166) as fil_iso3166:
-            for lst_lin in csv.reader(decomment(fil_iso3166), delimiter="\t"):  # You can also use dialect="excel-tab"
-                #log.debug(lst_lin)
-                if num_row == 0:  # assume this to be the header
-                    lst_head = lst_lin
-                    num_col = len(lst_head)
-                    lst_ids_required = ['alpha_2', 'alpha_3', 'numeric_3']
-                    if all([tok in lst_head for tok in lst_ids_required]):  # Header is ID-complete
-                        pass
-                    else:
-                        str_msg = f"ERR: Header in file: {str_fn_iso3166} do not contain all items in {lst_ids_required}"
-                        log.error(str_msg)
-                        raise Exception(str_msg)
-                else:
-                    str_num = lst_lin[0]  # Note: We assume the first column to be the Alpha-2 id.
-                    if str_num not in dic_iso3166.keys():
-                        dic_iso3166[str_num] = dict()
-                        for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
-                            dic_iso3166[str_num][lst_head[n]] = lst_lin[n]
-                    else:
-                        str_msg = f"key: {str_num} already exist - First column in file {str_fn_iso3166} must have unique values ..."
-                        log.error(str_msg)
-                        raise ValueError(str_msg)
-                num_row += 1
-            str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # remember the dir ...
-            log.info(f"Done: reading file: {str_fn_iso3166}")
+        log.info(f"Start reading file: {STR_FFN_ISO3166}")
+        _read_base_file()  # Will load the base file into self._data
+        log.info(f"Done: reading file: {STR_FFN_ISO3166}")
 
-        self._data = dic_iso3166
+        print(f"debug: post iso3166-1.tab\t> {self._data['GB']}")
+
+        # Read the additional .tab files. NOTE: This is where the Extendable comes from !!!
+        log.info(f"Start Loading Extended iso-3166-1 info ...")
+        for root, dirs, files in os.walk(STR_ROOT_PATH):
+            for str_fn in files:
+                if (str_fn.endswith(".tab")) and ('iso3166-1.tab' not in str_fn):  # We all ready handled iso3166-1.csv
+                    str_ffn = os.path.join(root, str_fn)
+                    log.info(f"Start reading file: {str_fn}")
+                    print(f"EXT file: {str_ffn}")
+                    _read_xtnd_file(str_ffn)
+                    # num_cnt = 0
+                    # with open(os.path.join(root, str_fn), 'r') as fil_ex:
+                    #     for line in fil_ex:
+                    #         # print(line.strip())
+                    #         data = line.split('#', 1)[0]
+                    #         if ',' in data:
+                    #             lst_in = _line_to_list(data, sep, qot)
+                    #             if num_cnt == 0:  # Header line
+                    #                 lst_head = lst_in
+                    #             else:
+                    #                 dic_iso3166 = _add_ext_key(dic_iso3166, lst_head, lst_in)
+                    #             num_cnt += 1
+                    log.info(f"Done: reading file: {os.path.join(root, str_fn)}")
+                    print(f"debug: post {str_fn}\t> {self._data['GB']}")
+
         log.info(f"Done: Loading base iso-3166-1 for {len(self._data)} territories")
 
-        str_root_path = os.path.realpath(fil_iso3166.name).rsplit(os.sep, 1)[0] + os.sep  # Use this place to look for other .csv files later
+    def _add_ext_key(self, lst_head, lst_keva):
+        """ Add new key(s) to a territory.
+        Do the hard work by calling the territory's own add function. """
+        ter = self._data[lst_head[0]]
+        ter = ter.add_ect_key(lst_head, lst_keva)
+        self._data[lst_head[0]] = ter
 
-        # Read the additional .csv files. NOTE: This is where the EC Extendable comes from !!!
-        log.info(f"Start Loading Extented iso-3166-1 info ...")
-        for root, dirs, files in os.walk(str_root_path):
-            for name in files:
-                if (name.endswith(".tab")) and ('iso3166-1.tab' not in name):  # We all ready handled iso3166-1.csv
-                    log.info(f"Start reading file: {os.path.join(root, name)}")
-                    # print(f"file: {name}")
-                    num_cnt = 0
-                    with open(os.path.join(root, name), 'r') as fil_ex:
-                        for line in fil_ex:
-                            # print(line.strip())
-                            data = line.split('#', 1)[0]
-                            if ',' in data:
-                                lst_in = _line_to_list(data, sep, qot)
-                                if num_cnt == 0:  # Header line
-                                    lst_head = lst_in
-                                else:
-                                    dic_iso3166 = _add_ext_key(dic_iso3166, lst_head, lst_in)
-                                num_cnt += 1
-                    log.info(f"   Done reading {num_cnt} extra info lines")
-
-        # End of functions _loaddata()
+    def prim_keys(self):
+        return self._lst_pk
 
     def dump_as_text(self):
         """ Convert the entire self data structure to text format
@@ -281,5 +331,6 @@ class Territories:
         For this reason it should maintain the same parameters as find. """
         for ter in self._data:
             pass
+
 
 log.debug("< main()")
