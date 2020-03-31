@@ -3,7 +3,7 @@ print(len(pycountry.countries))
 print(list(pycountry.countries)[0])
 
 # get
-germany = pycountry.countries.get(alpha_2='DE')
+germany = pycountry.countries.get_raw(alpha_2='DE')
 print(germany)
 print(germany.alpha_2)
 print(germany.alpha_3)

@@ -11,7 +11,6 @@ logging.basicConfig(
     level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-
 """ EC Extendable ISO 3166 class
 So far, only iso-3166-1 (country level) is implemented ...
 The basic official ISO 3166-1 contains 5 fields for each country:
@@ -139,7 +138,11 @@ class Territory:
         """ Return a list of all values from the class """
         return self._data_teri.values()
 
-    def get(self, str_key):
+    def get_raw(self, str_key):
+        """
+        :param str_key:
+        :return:
+        """
         if str_key in self.keys():
             return self._data_teri[str_key]
         else:
@@ -164,7 +167,6 @@ class Territories:
         self._lst_k = list()  # Initialise list of keys present in any Territory object
         self._lst_pk = list()  # Initialise list of validated primary keys
         self._load_data()  # Load the data files
-        self._update_inner_k()
         self._update_inner_pk()
 
     def _load_data(self):
@@ -272,16 +274,16 @@ class Territories:
                     set_ppk.discard(ppk)
                     log.info(f"update_inner_k(): '{ppk}' is not prim. key, because it's not represented in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
-                if isinstance(ter.get(ppk), list):
+                if isinstance(ter.get_raw(ppk), list):
                     set_ppk.discard(ppk)
                     log.info(f"update_inner_k(): '{ppk}' is not prim. key, because the value is a list in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
-                if empty(ter.get(ppk)):
+                if empty(ter.get_raw(ppk)):
                     set_ppk.discard(ppk)
                     log.info(f"update_inner_k(): '{ppk}' is not prim. key, because the value is empty in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
                 # remember this value for later uniqueness check
-                lst_all.append(ter.get(ppk))
+                lst_all.append(ter.get_raw(ppk))
             # Uniqueness check
             num_cnt_ter = len(self.keys())  # total number of keys in Territories
             num_cnt_unq = len(set([str(itm) for itm in lst_all]))  # make string while counting, as list-of-list is not hashable
@@ -298,7 +300,7 @@ class Territories:
         ter = self.guess(lst_vals[0], categories=[lst_keys[0]])  # Guess will be unique, because lst_keys[0] is a valid prim. key!
         if ter:
             ter.add_ext_key(lst_keys, lst_vals)  # update the Territory
-            self._data_ters[ter.get(ID_PREFERRED)] = ter  # return the Territory to Territories
+            self._data_ters[ter.get_raw(ID_PREFERRED)] = ter  # return the Territory to Territories
 
     def inner_keys(self):
         return self._lst_k
@@ -320,9 +322,23 @@ class Territories:
                 str_ret += f"\n     {k}: {ter[k]}"
         return str_ret
 
-    def get(self, str_id):
-        """ Return a dictionary with the territory information for territory with alpha-2 = id
-        if id don't exist, then return None. """
+    def get(self, term):
+        """ This function is specifically for being compatible with: https://pypi.org/project/iso3166/
+        It will try to find one, and preferably only one, country object.
+        It will only look in default ISO 3166-1 fields
+        :param term: the term to search for, string or int
+        :return:
+        """
+        print(f"get({term})")
+        if isinstance(term, int):
+            term = ("000" + str(term))[-3:]
+        return self.guess(term, ['alpha_2', 'alpha_3', 'numeric_3', 'name_en', 'name_long_en'])
+
+    def get_ter(self, str_id):
+        """ Return a dictionary with the territory obj. for territory with ID_PREFERRED = str_id
+        if str_id don't exist, then return None.
+        This was meant as the get() function, but to stay compatible with https://pypi.org/project/iso3166/
+        we need to rename it. """
         if str_id in self._data_ters.keys():
             return self._data_ters[str_id]
         else:
@@ -364,10 +380,10 @@ class Territories:
         else:
             cats = set(categories)
         for key_ter in self.keys():  # for each Territory key in Territories
-            ter = self.get(key_ter)
+            ter = self.get_ter(key_ter)
             for cat in (cats & set(ter.keys())):  # the intersection of the two sets
-                if ter.get(cat) == token:
-                    lst_ret.append(self.get(key_ter))
+                if ter.get_raw(cat) == token:
+                    lst_ret.append(self.get_ter(key_ter))
                     break  # No reason to test more categories
         return lst_ret
 

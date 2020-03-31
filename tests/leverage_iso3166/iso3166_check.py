@@ -8,8 +8,8 @@ https://pypi.org/project/iso3166/
 pip install iso3166
 """
 
-for itm in sorted(dir(iso3166)):
-       print(f" - {itm}")
+# for itm in sorted(dir(iso3166)):
+#        print(f" - {itm}")
 
 # From the online example usage (slightly modified) : -------------------------
 
@@ -41,7 +41,7 @@ print(obj)
 print(str(type(obj)))
 print([itm for itm in dir(obj) if itm[:2] != '__'])
 
-# Dig into USA
+print("\nDig into USA:")
 print('alpha2:', obj.alpha2)
 print('alpha3:', obj.alpha3)
 print('numeric:', obj.numeric)
@@ -53,8 +53,8 @@ print('count:', obj.count('non-sense'))
 print('index:', obj.index('USA'))
 print('obj[2]:', obj[2])
 
-# All the same for Denmark
-obj = iso3166.countries.get('dk')
+print("\nAll the same for Denmark:")
+obj = iso3166.countries.get('Denmark')
 print('alpha2:', obj.alpha2)
 print('alpha3:', obj.alpha3)
 print('numeric:', obj.numeric)
@@ -66,10 +66,3 @@ print('count:', obj.count('non-sense'))
 # print('index:', obj.index('USA')) -- this crashes ...
 print('obj[2]:', obj[2])
 
-
-print("------------- Countries. level ------")
-obj = iso3166.countries
-print(obj)
-print(str(type(obj)))
-# print(dir(obj))
-print([itm for itm in dir(obj) if itm[:2] != '__'])
