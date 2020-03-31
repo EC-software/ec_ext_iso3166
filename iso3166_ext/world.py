@@ -113,22 +113,29 @@ class Territory:
     def add_ext_key(self, lst_head, lst_vals):
         """ Add one or more key-val sets to the Territory, based on an existing primary key.
         First key in lst_head must be a valid Prim. key. - but that is a property of the entire Territories instance.
-        First key also have to be amongst the existing keys, and we can check that. """
-        if lst_head[0] in self.keys():
-            for n in range(len(lst_head)):
-                if n > 0:  # don't update the prim. key
-                    if lst_head[n] not in self.keys():  # it's a brand new key, just put it in
-                        self._data_teri[lst_head[n]] = lst_vals[n]
-                    else:  # key already exists, we need a list
-                        if isinstance(self._data_teri[lst_head[n]], list):  # it's already a list
-                            lst_val = self._data_teri[lst_head[n]]
-                        else:  # we put existing value in a list
-                            lst_val = [self._data_teri[lst_head[n]]]
-                        lst_val.append(lst_vals[n])  # we add the new value to the list
-                        self._data_teri[lst_head[n]] = lst_val  # return the updated list to data collection
+        First key also have to be amongst the existing keys, and we can check that.
+        The two lists need to have same length. """
+        if len(lst_head) == len(lst_vals):
+            if lst_head[0] in self.keys():
+                for n in range(len(lst_head)):
+                    if n > 0:  # don't update the prim. key
+                        if lst_head[n] not in self.keys():  # it's a brand new key, just put it in
+                            self._data_teri[lst_head[n]] = lst_vals[n]
+                        else:  # key already exists, we need a list
+                            if isinstance(self._data_teri[lst_head[n]], list):  # it's already a list
+                                ret_val = self._data_teri[lst_head[n]]
+                            else:  # we put existing value in a list
+                                ret_val = [self._data_teri[lst_head[n]]]
+                            ret_val.append(lst_vals[n])  # we add the new value to the list
+                            ret_val = list(set(ret_val))  # eliminate duplicate values
+                            if len(ret_val) == 1:
+                                ret_val = ret_val[0]  # if list of one value, take it out of the list
+                            self._data_teri[lst_head[n]] = ret_val  # return the updated list to data collection, while removing duplicates
+            else:
+                log.warning(f"add_ext_key() can't add, if first key: {lst_head[0]} "
+                            f"is not an primary key for the Territory: {self.keys()}")
         else:
-            log.warning(f"add_ext_key() can't add, if first key: {lst_head[0]} "
-                        f"is not an primary key for the Territory: {self.keys()}")
+            log.warning(f"add_ext_key() can't add, if not same number of keys and vals {lst_head} <> {lst_vals}")
 
     def keys(self):
         """ Return a list of all keys known to the class """
@@ -204,7 +211,6 @@ class Territories:
             log.debug(f"x1 inner_k  {self.inner_keys()}")
             log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
             log.debug(f"x1 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
-            log.debug(f"x1 self.keys(!=2): {len([tok for tok in self.keys() if len(tok) != 2])}:{sorted([tok for tok in self.keys() if len(tok) != 2])}")
 
         def _read_xtnd_file(str_fn):
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
@@ -221,7 +227,7 @@ class Territories:
                             return str_fn
                         str_msg = f"accepted header: {lst_head}"
                         log.info(str_msg)
-                        print(str_msg)
+                        ##print(str_msg)
                     else:
                         self._add_ext_key(lst_head, [tok.strip() for tok in lst_lin])  # add while trimming whitespaces
                     num_row += 1
@@ -229,7 +235,6 @@ class Territories:
             log.debug(f"x2 inner_k  {self.inner_keys()}")
             log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
             log.debug(f"x2 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
-            log.debug(f"x2 self.keys(!=2): {len([tok for tok in self.keys() if len(tok) != 2])}:{sorted([tok for tok in self.keys() if len(tok) != 2])}\n")
             return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
@@ -247,7 +252,7 @@ class Territories:
                     str_ffn = os.path.join(root, str_fn)
                     log.info(f"Start reading file: {str_fn}")
                     _read_xtnd_file(str_ffn)
-                    log.info(f"Done: reading file: {os.path.join(root, str_fn)}")
+                    log.info(f"Done: reading file: {os.path.join(root, str_fn)}\n")
 
                     print(f"debug: post {str_fn}\t-> {self._data_ters['GB'].as_text()}")
 
@@ -267,7 +272,7 @@ class Territories:
         self._lst_k = list(set_k)
 
     def _update_inner_pk(self):
-        """ Update list of Validated Primary keys.
+        """ Update list of Validated Primary keys, from list of inner keys
         For a key to qualify, it must:
         1) be represented, with a non-empty value, in all member Territory objects
         2) hold a unique value for every Territory objects, i.e. no two Territory objects can have the same value. """
@@ -280,28 +285,33 @@ class Territories:
 
         self._update_inner_k()  # Always make sure self._lst_k is up-to-date
         set_ppk = set(self._lst_k)  # Any candidate key is a ppk (potential primary key), until proven otherwise
+        ##log.debug(f"_update_inner_pk(): initial set: {set_ppk}")
         for ppk in list(set_ppk):  # make a list from the set, to avoid editing the set while loping it
-            lst_val = list()  # Initialise list of values, for this ppk
+            lst_all = list()  # list for uniqueness check
             for key_ter in self.keys():  # test that all Territory objects have the key
                 ter = self._data_ters[key_ter]
                 if ppk not in ter.keys() or empty(ter.get(ppk)):
                     set_ppk.discard(ppk)
                     break  # No need to look further, ppk is dis-qualified
-                else:
-                    lst_val.append(ter.get(ppk))
-            if len(list(set(lst_val))) != len(self.keys()):  # test that all values are unique
+                else:  # remember this value for later uniqueness check
+                    lst_all.append(ter.get(ppk))
+            # Uniqueness check
+            num_cnt_ter = len(self.keys())  # total number of keys in Territories
+            num_cnt_unq = len(set([str(itm) for itm in lst_all]))  # make string while counting, as list-of-list is not hashable
+            if num_cnt_unq != num_cnt_ter:  # test for uniqueness
                 set_ppk.discard(ppk)
         self._lst_pk = list(set_ppk)  # update the _lst_pk value on self.
 
     def _add_ext_key(self, lst_keys, lst_vals):
         """ Add new key(s) to a territory.
         Do the hard work by calling the territory's own add function.
-        It should have been checked beforehand that lst_keys[0] is a valid prim. key, since this will run for each line.
+        It should have been checked beforehand that lst_keys[0] is a valid prim. key, not here, since this will run for each line.
         """
         ##log.debug(f"_add_ext_key({lst_keys}, {lst_vals}")
         ter = self.guess(lst_vals[0], categories=[lst_keys[0]])  # Guess will be unique, because lst_keys[0] is a valid prim. key!
-        ter.add_ext_key(lst_keys, lst_vals)  # update the Territory
-        self._data_ters[ter.get(ID_PREFERRED)] = ter  # return the Territory to Territories
+        if ter:
+            ter.add_ext_key(lst_keys, lst_vals)  # update the Territory
+            self._data_ters[ter.get(ID_PREFERRED)] = ter  # return the Territory to Territories
 
     def inner_keys(self):
         return self._lst_k
@@ -390,7 +400,7 @@ class Territories:
             return lst_suggestion[0]
         else:
             ##log.debug(f"guess() ret: []")
-            return []
+            return None
 
 
 log.debug("< main()")
