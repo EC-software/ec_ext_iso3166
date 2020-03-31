@@ -48,6 +48,7 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 #   https://www.iso.org/obp/ui/#iso:pub:PUB500001:en
 #   https://salsa.debian.org/iso-codes-team/iso-codes/-/tree/master/data
 #   https://datahub.io/core/country-list#python
+# ToDo: Should any of the classes have: __getitem__(), __iter__(), __len__(), __next__(), yield
 
 log.debug("> main()")
 
@@ -102,13 +103,11 @@ class Territory:
 
     def __init__(self, lst_head, lst_vals):
         """ Create a single territory from two lists. """
-        ##print(lst_head, lst_vals)
         self._data_teri = dict()
         if len(lst_head) == len(set(list(lst_head))):  # Values in header must be unique
             if len(lst_head) == len(lst_vals):  # number of keys and values must match
                 for n in range(len(lst_head)):
                     self._data_teri[lst_head[n]] = lst_vals[n]
-        ##print(f"cnf.: {self._data_teri}")
 
     def add_ext_key(self, lst_head, lst_vals):
         """ Add one or more key-val sets to the Territory, based on an existing primary key.
@@ -150,6 +149,7 @@ class Territory:
             return self._data_teri[str_key]
         else:
             log.warning(f"get() can't deliver, because key: {str_key} is not in keys(): {self.keys()}")
+            return None
 
     def as_text(self):
         str_ret = str()  # Initialising the return object
@@ -158,6 +158,7 @@ class Territory:
         for k in sorted(ter.keys()):
             str_ret += f"\t\t{k}: {ter[k]}\n"
         return str_ret.strip()
+
 
 class Territories:
     """ Territories (plural) is a collection of Territory-objects.
@@ -182,13 +183,10 @@ class Territories:
 
         def _read_base_file():
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
-            num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
             with open(STR_FFN_ISO3166) as fil_iso3166:
                 for lst_lin in csv.reader(_decomment(fil_iso3166), delimiter='\t'):
-                    # log.debug(lst_lin)
                     if num_row == 0:  # assume this to be the header
                         lst_head = lst_lin
-                        num_col = len(lst_head)
                         if all([tok in lst_head for tok in IDS_REQUIRED]):  # Header is ID-complete
                             log.info(f"Header is: {lst_head}")
                         else:
@@ -199,8 +197,6 @@ class Territories:
                         str_first_key = lst_lin[0]  # assume the first column to be the Alpha-2 id.
                         if str_first_key not in self._data_ters.keys():
                             self._data_ters[str_first_key] = Territory(lst_head, lst_lin)
-                            # for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
-                            #     self._data_ters[str_first_key][lst_head[n]] = lst_lin[n]
                         else:
                             str_msg = f"key: {str_first_key} already exist - First column in file {STR_FFN_ISO3166} must have unique values ..."
                             log.error(str_msg)
@@ -208,41 +204,30 @@ class Territories:
                     num_row += 1
             # Establish and confirm inner primary keys by looking at all 'inner prime key candidates'
             self._update_inner_pk()
-            ##log.debug(f"x1 inner_k  {self.inner_keys()}")
-            ##log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
-            ##log.debug(f"x1 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
 
-        def _read_xtnd_file(str_fn):
+        def _read_xtnd_file(str_fn_xtnd):
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
-            num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
-            with open(str_fn) as fil_xtnd:
+            with open(str_fn_xtnd) as fil_xtnd:
                 for lst_lin in csv.reader(_decomment(fil_xtnd), delimiter='\t'):
-                    ##log.debug(f"xtnd_line: {lst_lin}")
                     if num_row == 0:  # assume this to be the header
                         lst_head = [tok.strip() for tok in lst_lin]  # trip whitespaces
                         tmp_val_prim = self.inner_prim_keys()
                         if lst_head[0] not in tmp_val_prim:  # First column must be existing, valid prim. key.
                             log.warning(f"Warning: First key (column): {lst_head[0]} "
-                                        f"in file: {str_fn} is not a valid prim. key, at this time ...")
-                            return str_fn
+                                        f"in file: {str_fn_xtnd} is not a valid prim. key, at this time ...")
+                            return str_fn_xtnd
                         str_msg = f"accepted header: {lst_head}"
                         log.info(str_msg)
-                        ##print(str_msg)
                     else:
                         self._add_ext_key(lst_head, [tok.strip() for tok in lst_lin])  # add while trimming whitespaces
                     num_row += 1
             self._update_inner_pk()
-            ##log.debug(f"x2 inner_k  {self.inner_keys()}")
-            ##log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
-            ##log.debug(f"x2 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
             return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
         log.info(f"Start reading file: {STR_FFN_ISO3166}")
         _read_base_file()  # Will load the base file into self._data_ters
         log.info(f"Done: reading file: {STR_FFN_ISO3166}\n")
-
-        print(f"debug: post iso3166-1.tab\t-> {self._data_ters['GB'].as_text()}")
 
         # Read the additional .tab files. NOTE: This is where the Extendable comes from !!!
         log.info(f"Start Loading Extended iso-3166-1 info ...")
@@ -254,9 +239,7 @@ class Territories:
                     _read_xtnd_file(str_ffn)
                     log.info(f"Done: reading file: {os.path.join(root, str_fn)}\n")
 
-                    print(f"debug: post {str_fn}\t-> {self._data_ters['GB'].as_text()}")
-
-        log.info(f"Done: Loading base iso-3166-1 for {len(self._data_ters)} territories")
+        log.info(f"Done: Loading base iso-3166-1 for {len(self._data_ters)} territories ------------------------------")
 
     def keys(self):
         """ Return list of all keys, i.e. list of the ID_PREFERRED for each Territory-obj. in Territories """
@@ -286,22 +269,21 @@ class Territories:
 
         self._update_inner_k()  # Always make sure self._lst_k is up-to-date
         set_ppk = set(self._lst_k)  # Any candidate key is a ppk (potential primary key), until proven otherwise
-        ##log.debug(f"_update_inner_pk(): initial set: {set_ppk}")
         for ppk in list(set_ppk):  # make a list from the set, to avoid editing the set while loping it
             lst_all = list()  # list for uniqueness check
             for key_ter in self.keys():  # test that all Territory objects have the key
                 ter = self._data_ters[key_ter]
                 if ppk not in ter.keys():
                     set_ppk.discard(ppk)
-                    log.info(f"update_inner_k(): {ppk} is not prim. key, because it's not represented in {key_ter}")
+                    log.info(f"update_inner_k(): '{ppk}' is not prim. key, because it's not represented in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
                 if isinstance(ter.get(ppk), list):
                     set_ppk.discard(ppk)
-                    log.info(f"update_inner_k(): {ppk} is not prim. key, because the value is a list in {key_ter}")
+                    log.info(f"update_inner_k(): '{ppk}' is not prim. key, because the value is a list in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
                 if empty(ter.get(ppk)):
                     set_ppk.discard(ppk)
-                    log.info(f"update_inner_k(): {ppk} is not prim. key, because the value is empty in {key_ter}")
+                    log.info(f"update_inner_k(): '{ppk}' is not prim. key, because the value is empty in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
                 # remember this value for later uniqueness check
                 lst_all.append(ter.get(ppk))
@@ -318,7 +300,6 @@ class Territories:
         Do the hard work by calling the territory's own add function.
         It should have been checked beforehand that lst_keys[0] is a valid prim. key, not here, since this will run for each line.
         """
-        ##log.debug(f"_add_ext_key({lst_keys}, {lst_vals}")
         ter = self.guess(lst_vals[0], categories=[lst_keys[0]])  # Guess will be unique, because lst_keys[0] is a valid prim. key!
         if ter:
             ter.add_ext_key(lst_keys, lst_vals)  # update the Territory
@@ -372,31 +353,26 @@ class Territories:
                 lst_ret.append((ter, lst_miss))
         return lst_ret
 
-    def find(self, token, categories=[]):
+    def find(self, token, categories=()):
         """ Allows for multiple returns, therefore always return a list.
         If no match is found for token it returns an empty list.
         Allow for categories ...
         ToDo: Find a better word for categories
         :param token: str: The phrase to look for
-        :param categories: list: If non-empty, limit the search to these fields
+        :param categories: tuple or list: If non-empty, limit the search to these fields
         :return: a list of Territory object, that meet the criteria. The list can be empty
         """
-        ##log.debug(f"find({token}, {categories})")
         lst_ret = list()  # Initialise the return object
         if len(categories) == 0:
             cats = set(self.inner_keys())
         else:
             cats = set(categories)
-        ##log.debug(f"find()   cats: {cats}")
         for key_ter in self.keys():  # for each Territory key in Territories
-            ##log.debug(f"find()   keyt: {key_ter}")
             ter = self.get(key_ter)
             for cat in (cats & set(ter.keys())):  # the intersection of the two sets
                 if ter.get(cat) == token:
                     lst_ret.append(self.get(key_ter))
-                    ##log.debug(f"find()   HIT: {key_ter} <------------- HIT")
                     break  # No reason to test more categories
-        ##log.debug(f"find()   ret: {lst_ret}")
         return lst_ret
 
     def guess(self, token, categories):
@@ -404,13 +380,10 @@ class Territories:
         that returns the first element in the list, not the whole list.
         For this reason it should maintain the same parameters as find. """
         # ToDo: Consider return self.find(token, category)[:0] or something, to make it all a one-liner
-        ##log.debug(f"guess({token}, {categories})")
         lst_suggestion = self.find(token, categories)
         if len(lst_suggestion) > 0:
-            ##log.debug(f"guess() ret: {lst_suggestion[0]}")
             return lst_suggestion[0]
         else:
-            ##log.debug(f"guess() ret: []")
             return None
 
 

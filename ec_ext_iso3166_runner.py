@@ -19,7 +19,7 @@ Now the default object is the collection, that we can ask questions.
 print(" ------ Welcome to tests-bed -------------")
 print(f"data root dir: {iso3166_ext.root_dir}")
 trs = iso3166_ext.Territories()  # Note this returns the entire collection of countries (territories)
-print(f"Done building Territories: {trs}")
+print(f"Done building Territories ...")
 
 # print(f"Sorted categories: {trs.categories()}")
 # print(f"Orderd categories: {iso3166_ext.order_iso3166_keys(trs.categories())}")
