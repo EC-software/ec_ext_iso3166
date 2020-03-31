@@ -103,12 +103,12 @@ class Territory:
     def __init__(self, lst_head, lst_vals):
         """ Create a single territory from two lists. """
         ##print(lst_head, lst_vals)
-        self._data = dict()
+        self._data_teri = dict()
         if len(lst_head) == len(set(list(lst_head))):  # Values in header must be unique
             if len(lst_head) == len(lst_vals):  # number of keys and values must match
                 for n in range(len(lst_head)):
-                    self._data[lst_head[n]] = lst_vals[n]
-        ##print(f"cnf.: {self._data}")
+                    self._data_teri[lst_head[n]] = lst_vals[n]
+        ##print(f"cnf.: {self._data_teri}")
 
     def add_ext_key(self, lst_head, lst_vals):
         """ Add one or more key-val sets to the Territory, based on an existing primary key.
@@ -118,35 +118,35 @@ class Territory:
             for n in range(len(lst_head)):
                 if n > 0:  # don't update the prim. key
                     if lst_head[n] not in self.keys():  # it's a brand new key, just put it in
-                        self._data[lst_head[n]] = lst_vals[n]
+                        self._data_teri[lst_head[n]] = lst_vals[n]
                     else:  # key already exists, we need a list
-                        if isinstance(self._data[lst_head[n]], list):  # it's already a list
-                            lst_val = self._data[lst_head[n]]
+                        if isinstance(self._data_teri[lst_head[n]], list):  # it's already a list
+                            lst_val = self._data_teri[lst_head[n]]
                         else:  # we put existing value in a list
-                            lst_val = [self._data[lst_head[n]]]
+                            lst_val = [self._data_teri[lst_head[n]]]
                         lst_val.append(lst_vals[n])  # we add the new value to the list
-                        self._data[lst_head[n]] = lst_val  # return the updated list to data collection
+                        self._data_teri[lst_head[n]] = lst_val  # return the updated list to data collection
         else:
             log.warning(f"add_ext_key() can't add, if first key: {lst_head[0]} "
                         f"is not an primary key for the Territory: {self.keys()}")
 
     def keys(self):
         """ Return a list of all keys known to the class """
-        return self._data.keys()
+        return self._data_teri.keys()
 
     def values(self):
         """ Return a list of all values from the class """
-        return self._data.values()
+        return self._data_teri.values()
 
     def get(self, str_key):
         if str_key in self.keys():
-            return self._data[str_key]
+            return self._data_teri[str_key]
         else:
             log.warning(f"get() can't deliver, because key: {str_key} is not in keys(): {self.keys()}")
 
     def as_text(self):
         str_ret = str()  # Initialising the return object
-        ter = self._data
+        ter = self._data_teri
         str_ret += f"\tTER: {ter[ID_PREFERRED]}\n"
         for k in sorted(ter.keys()):
             str_ret += f"\t\t{k}: {ter[k]}\n"
@@ -157,7 +157,7 @@ class Territories:
     Territory-objects are generally Countries, but also include e.g. Antarctica, Virgin Islands, Vatican state, etc. """
 
     def __init__(self):
-        self._data = dict()  # We use a dict(), not a tuple, as we need to modify it
+        self._data_ters = dict()  # We use a dict(), not a tuple, as we need to modify it
         self._lst_k = list()  # Initialise list of keys present in any Territory object
         self._lst_pk = list()  # Initialise list of validated primary keys
         self._load_data()  # Load the data files
@@ -190,10 +190,10 @@ class Territories:
                             raise Exception(str_msg)
                     else:
                         str_first_key = lst_lin[0]  # assume the first column to be the Alpha-2 id.
-                        if str_first_key not in self._data.keys():
-                            self._data[str_first_key] = Territory(lst_head, lst_lin)
+                        if str_first_key not in self._data_ters.keys():
+                            self._data_ters[str_first_key] = Territory(lst_head, lst_lin)
                             # for n in range(len(lst_head)):  # Note that Alpha-2 is loaded again, to allow homogeneous search for all parameters
-                            #     self._data[str_first_key][lst_head[n]] = lst_lin[n]
+                            #     self._data_ters[str_first_key][lst_head[n]] = lst_lin[n]
                         else:
                             str_msg = f"key: {str_first_key} already exist - First column in file {STR_FFN_ISO3166} must have unique values ..."
                             log.error(str_msg)
@@ -203,15 +203,15 @@ class Territories:
             self._update_inner_pk()
             log.debug(f"x1 inner_k  {self.inner_keys()}")
             log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
-            log.debug(f"x1 keys1: {sorted(self.keys())}")
-            log.debug(f"x1 keys2: {sorted([tok for tok in self.keys() if len(tok) != 2])}")
+            log.debug(f"x1 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
+            log.debug(f"x1 self.keys(!=2): {len([tok for tok in self.keys() if len(tok) != 2])}:{sorted([tok for tok in self.keys() if len(tok) != 2])}")
 
         def _read_xtnd_file(str_fn):
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
             num_col = 0  # Number of fields, assumed 0 until we see the header. Will likely grow to around 5
             with open(str_fn) as fil_xtnd:
                 for lst_lin in csv.reader(_decomment(fil_xtnd), delimiter='\t'):
-                    log.debug(f"xtnd_line: {lst_lin}")
+                    ##log.debug(f"xtnd_line: {lst_lin}")
                     if num_row == 0:  # assume this to be the header
                         lst_head = [tok.strip() for tok in lst_lin]  # trip whitespaces
                         tmp_val_prim = self.inner_prim_keys()
@@ -228,16 +228,16 @@ class Territories:
             self._update_inner_pk()
             log.debug(f"x2 inner_k  {self.inner_keys()}")
             log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
-            log.debug(f"x2 keys1: {sorted(self.keys())}")
-            log.debug(f"x2 keys2: {sorted([tok for tok in self.keys() if len(tok) != 2])}")
+            log.debug(f"x2 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
+            log.debug(f"x2 self.keys(!=2): {len([tok for tok in self.keys() if len(tok) != 2])}:{sorted([tok for tok in self.keys() if len(tok) != 2])}\n")
             return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
         log.info(f"Start reading file: {STR_FFN_ISO3166}")
-        _read_base_file()  # Will load the base file into self._data
-        log.info(f"Done: reading file: {STR_FFN_ISO3166}")
+        _read_base_file()  # Will load the base file into self._data_ters
+        log.info(f"Done: reading file: {STR_FFN_ISO3166}\n")
 
-        print(f"debug: post iso3166-1.tab\t-> {self._data['GB'].as_text()}")
+        print(f"debug: post iso3166-1.tab\t-> {self._data_ters['GB'].as_text()}")
 
         # Read the additional .tab files. NOTE: This is where the Extendable comes from !!!
         log.info(f"Start Loading Extended iso-3166-1 info ...")
@@ -249,19 +249,19 @@ class Territories:
                     _read_xtnd_file(str_ffn)
                     log.info(f"Done: reading file: {os.path.join(root, str_fn)}")
 
-                    print(f"debug: post {str_fn}\t-> {self._data['GB'].as_text()}")
+                    print(f"debug: post {str_fn}\t-> {self._data_ters['GB'].as_text()}")
 
-        log.info(f"Done: Loading base iso-3166-1 for {len(self._data)} territories")
+        log.info(f"Done: Loading base iso-3166-1 for {len(self._data_ters)} territories")
 
     def keys(self):
         """ Return list of all keys, i.e. list of the ID_PREFERRED for each Territory-obj. in Territories """
-        return self._data.keys()
+        return self._data_ters.keys()
 
     def _update_inner_k(self):
         """ Update self._lst_k """
         set_k = set()  # Initialise set of all keys
         for key_ter in self.keys():
-            ter = self._data[key_ter]
+            ter = self._data_ters[key_ter]
             for key_t in ter.keys():
                 set_k.add(key_t)
         self._lst_k = list(set_k)
@@ -283,7 +283,7 @@ class Territories:
         for ppk in list(set_ppk):  # make a list from the set, to avoid editing the set while loping it
             lst_val = list()  # Initialise list of values, for this ppk
             for key_ter in self.keys():  # test that all Territory objects have the key
-                ter = self._data[key_ter]
+                ter = self._data_ters[key_ter]
                 if ppk not in ter.keys() or empty(ter.get(ppk)):
                     set_ppk.discard(ppk)
                     break  # No need to look further, ppk is dis-qualified
@@ -298,10 +298,10 @@ class Territories:
         Do the hard work by calling the territory's own add function.
         It should have been checked beforehand that lst_keys[0] is a valid prim. key, since this will run for each line.
         """
-        print(f"addextkey: keys: {lst_keys}, vals: {lst_vals}")
+        ##log.debug(f"_add_ext_key({lst_keys}, {lst_vals}")
         ter = self.guess(lst_vals[0], categories=[lst_keys[0]])  # Guess will be unique, because lst_keys[0] is a valid prim. key!
-        ter = ter.add_ext_key(lst_keys, lst_vals)
-        self._data[lst_keys[0]] = ter
+        ter.add_ext_key(lst_keys, lst_vals)  # update the Territory
+        self._data_ters[ter.get(ID_PREFERRED)] = ter  # return the Territory to Territories
 
     def inner_keys(self):
         return self._lst_k
@@ -315,8 +315,8 @@ class Territories:
         :return: text string, likely with multiple lines in it...
         """
         str_ret = str()
-        for key_t in sorted(self._data.keys()):
-            ter = self._data[key_t]
+        for key_t in sorted(self._data_ters.keys()):
+            ter = self._data_ters[key_t]
             str_ret += f"\nTER: {ter[ID_PREFERRED]}"
             # for k in sorted(ter.keys()):
             for k in order_iso3166_keys(ter.keys()):
@@ -326,8 +326,8 @@ class Territories:
     def get(self, str_id):
         """ Return a dictionary with the territory information for territory with alpha-2 = id
         if id don't exist, then return None. """
-        if str_id in self._data.keys():
-            return self._data[str_id]
+        if str_id in self._data_ters.keys():
+            return self._data_ters[str_id]
         else:
             log.warning(f"Can't find: {str_id} in self-data")
             return None
@@ -335,8 +335,8 @@ class Territories:
     def categories(self):
         """ Return a list of all categories known to the class """
         set_cat = set()
-        for ter in self._data.keys():
-            set_cat.update(self._data[ter].keys())
+        for ter in self._data_ters.keys():
+            set_cat.update(self._data_ters[ter].keys())
         return sorted(set_cat)
 
     def list_missing_values(self):
@@ -345,8 +345,8 @@ class Territories:
         ToDo: Let missing_values return list by value, in add to list by key """
         lst_cat = self.categories()
         lst_ret = list()
-        for ter in sorted(self._data.keys()):
-            lst_miss = [key for key in lst_cat if key not in self._data[ter].keys()]
+        for ter in sorted(self._data_ters.keys()):
+            lst_miss = [key for key in lst_cat if key not in self._data_ters[ter].keys()]
             if len(lst_miss) > 0:
                 lst_ret.append((ter, lst_miss))
         return lst_ret
@@ -360,21 +360,22 @@ class Territories:
         :param categories: list: If non-empty, limit the search to these fields
         :return: a list of Territory object, that meet the criteria. The list can be empty
         """
-        ##print(f"find: tok: {token}, cat: {categories}")
+        ##log.debug(f"find({token}, {categories})")
         lst_ret = list()  # Initialise the return object
         if len(categories) == 0:
             cats = set(self.inner_keys())
         else:
             cats = set(categories)
-        ##print(f"find:   cats: {cats}")
+        ##log.debug(f"find()   cats: {cats}")
         for key_ter in self.keys():  # for each Territory key in Territories
-            ##print(f"find:   keyt: {key_ter}")
+            ##log.debug(f"find()   keyt: {key_ter}")
             ter = self.get(key_ter)
             for cat in (cats & set(ter.keys())):  # the intersection of the two sets
                 if ter.get(cat) == token:
                     lst_ret.append(self.get(key_ter))
+                    ##log.debug(f"find()   HIT: {key_ter} <------------- HIT")
                     break  # No reason to test more categories
-        ##print(f"find: ret: {lst_ret}")
+        ##log.debug(f"find()   ret: {lst_ret}")
         return lst_ret
 
     def guess(self, token, categories):
@@ -382,13 +383,13 @@ class Territories:
         that returns the first element in the list, not the whole list.
         For this reason it should maintain the same parameters as find. """
         # ToDo: Consider return self.find(token, category)[:0] or something, to make it all a one-liner
-        print(f"guess: tok: {token}, cat: {categories}")
+        ##log.debug(f"guess({token}, {categories})")
         lst_suggestion = self.find(token, categories)
         if len(lst_suggestion) > 0:
-            print(f"guess: ret: {lst_suggestion[0]}")
+            ##log.debug(f"guess() ret: {lst_suggestion[0]}")
             return lst_suggestion[0]
         else:
-            print(f"guess: ret: []")
+            ##log.debug(f"guess() ret: []")
             return []
 
 
