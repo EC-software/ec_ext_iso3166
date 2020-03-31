@@ -208,9 +208,9 @@ class Territories:
                     num_row += 1
             # Establish and confirm inner primary keys by looking at all 'inner prime key candidates'
             self._update_inner_pk()
-            log.debug(f"x1 inner_k  {self.inner_keys()}")
-            log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
-            log.debug(f"x1 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
+            ##log.debug(f"x1 inner_k  {self.inner_keys()}")
+            ##log.debug(f"x1 inner_pk {self.inner_prim_keys()}")
+            ##log.debug(f"x1 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
 
         def _read_xtnd_file(str_fn):
             num_row = 0  # Number of records, assume to grow to ca. 249 (number of iso 3166-1 codes on the planet)
@@ -232,9 +232,9 @@ class Territories:
                         self._add_ext_key(lst_head, [tok.strip() for tok in lst_lin])  # add while trimming whitespaces
                     num_row += 1
             self._update_inner_pk()
-            log.debug(f"x2 inner_k  {self.inner_keys()}")
-            log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
-            log.debug(f"x2 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
+            ##log.debug(f"x2 inner_k  {self.inner_keys()}")
+            ##log.debug(f"x2 inner_pk {self.inner_prim_keys()}")
+            ##log.debug(f"x2 self.keys(): {len(self.keys())}:{sorted(self.keys())}")
             return None  # Indicating that all went Okay
 
         log.info(f"Start Loading base iso-3166-1")
@@ -263,18 +263,19 @@ class Territories:
         return self._data_ters.keys()
 
     def _update_inner_k(self):
-        """ Update self._lst_k """
-        set_k = set()  # Initialise set of all keys
-        for key_ter in self.keys():
+        """ Update inner keys
+         Inner keys are the keys of each Territory object's ._data_teri dictionary """
+        set_ik = set()  # Initialise set of all inner keys
+        for key_ter in self.keys():  # Note: key_ter is an outer key
             ter = self._data_ters[key_ter]
-            for key_t in ter.keys():
-                set_k.add(key_t)
-        self._lst_k = list(set_k)
+            for key_t in ter.keys():  # Note: key_t is an inner key
+                set_ik.add(key_t)
+        self._lst_k = list(set_ik)
 
     def _update_inner_pk(self):
         """ Update list of Validated Primary keys, from list of inner keys
         For a key to qualify, it must:
-        1) be represented, with a non-empty value, in all member Territory objects
+        1) be represented, with a single, non-empty value, in all member Territory objects
         2) hold a unique value for every Territory objects, i.e. no two Territory objects can have the same value. """
         
         def empty(itm):
@@ -290,17 +291,27 @@ class Territories:
             lst_all = list()  # list for uniqueness check
             for key_ter in self.keys():  # test that all Territory objects have the key
                 ter = self._data_ters[key_ter]
-                if ppk not in ter.keys() or empty(ter.get(ppk)):
+                if ppk not in ter.keys():
                     set_ppk.discard(ppk)
+                    log.info(f"update_inner_k(): {ppk} is not prim. key, because it's not represented in {key_ter}")
                     break  # No need to look further, ppk is dis-qualified
-                else:  # remember this value for later uniqueness check
-                    lst_all.append(ter.get(ppk))
+                if isinstance(ter.get(ppk), list):
+                    set_ppk.discard(ppk)
+                    log.info(f"update_inner_k(): {ppk} is not prim. key, because the value is a list in {key_ter}")
+                    break  # No need to look further, ppk is dis-qualified
+                if empty(ter.get(ppk)):
+                    set_ppk.discard(ppk)
+                    log.info(f"update_inner_k(): {ppk} is not prim. key, because the value is empty in {key_ter}")
+                    break  # No need to look further, ppk is dis-qualified
+                # remember this value for later uniqueness check
+                lst_all.append(ter.get(ppk))
             # Uniqueness check
             num_cnt_ter = len(self.keys())  # total number of keys in Territories
             num_cnt_unq = len(set([str(itm) for itm in lst_all]))  # make string while counting, as list-of-list is not hashable
             if num_cnt_unq != num_cnt_ter:  # test for uniqueness
                 set_ppk.discard(ppk)
         self._lst_pk = list(set_ppk)  # update the _lst_pk value on self.
+        log.info(f"update_inner_k(): Valid inner keys, i.e. Primary keys for attaching new data, are: {set_ppk}")
 
     def _add_ext_key(self, lst_keys, lst_vals):
         """ Add new key(s) to a territory.
