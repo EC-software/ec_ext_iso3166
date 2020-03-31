@@ -1,0 +1,1325 @@
+English short name
+	Alpha-2 code
+	Status
+EU
+	Exceptionally reserved
+SU
+	Exceptionally reserved
+EZ
+	Exceptionally reserved
+EA
+	Exceptionally reserved
+TA
+	Exceptionally reserved
+UN
+	Exceptionally reserved
+IC
+	Exceptionally reserved
+	Exceptionally reserved
+UK
+	Exceptionally reserved
+FX
+	Exceptionally reserved
+DG
+	Exceptionally reserved
+CP
+	Exceptionally reserved
+AC
+	Exceptionally reserved
+PC
+	Formerly used
+HV
+	Formerly used
+CS
+	Formerly used
+PU
+	Formerly used
+NH
+	Formerly used
+JT
+	Formerly used
+NQ
+	Formerly used
+WK
+	Formerly used
+PZ
+	Formerly used
+MI
+	Formerly used
+GE
+	Formerly used
+YD
+	Formerly used
+BQ
+	Formerly used
+DY
+	Formerly used
+RH
+	Formerly used
+CT
+	Formerly used
+VD
+	Formerly used
+AI
+	Formerly used
+BY
+	Formerly used
+FQ
+	Formerly used
+SK
+	Formerly used
+DD
+	Formerly used
+RP
+	Indeterminately reserved
+YV
+	Indeterminately reserved
+DY
+	Indeterminately reserved
+AP
+	Indeterminately reserved
+RL
+	Indeterminately reserved
+EM
+	Indeterminately reserved
+RH
+	Indeterminately reserved
+WV
+	Indeterminately reserved
+IB
+	Indeterminately reserved
+EV
+	Indeterminately reserved
+RM
+	Indeterminately reserved
+RI
+	Indeterminately reserved
+EF
+	Indeterminately reserved
+RA
+	Indeterminately reserved
+PI
+	Indeterminately reserved
+WO
+	Indeterminately reserved
+EW
+	Indeterminately reserved
+RN
+	Indeterminately reserved
+WG
+	Indeterminately reserved
+SF
+	Indeterminately reserved
+GC
+	Indeterminately reserved
+OA
+	Indeterminately reserved
+RB
+	Indeterminately reserved
+WL
+	Indeterminately reserved
+FL
+	Indeterminately reserved
+EP
+	Indeterminately reserved
+RC
+	Indeterminately reserved
+BX
+	Indeterminately reserved
+JA
+	Indeterminately reserved
+LF
+	Indeterminately reserved
+GI
+	Officially assigned
+AT
+	Officially assigned
+CH
+	Officially assigned
+TD
+	Officially assigned
+NO
+	Officially assigned
+LB
+	Officially assigned
+FM
+	Officially assigned
+BL
+	Officially assigned
+SH
+	Officially assigned
+MS
+	Officially assigned
+IR
+	Officially assigned
+GE
+	Officially assigned
+CD
+	Officially assigned
+FI
+	Officially assigned
+BH
+	Officially assigned
+SD
+	Officially assigned
+MO
+	Officially assigned
+IN
+	Officially assigned
+CY
+	Officially assigned
+VI
+	Officially assigned
+GA
+	Officially assigned
+PT
+	Officially assigned
+AL
+	Officially assigned
+LS
+	Officially assigned
+NG
+	Officially assigned
+HR
+	Officially assigned
+SY
+	Officially assigned
+UM
+	Officially assigned
+BD
+	Officially assigned
+KW
+	Officially assigned
+MK
+	Officially assigned
+CU
+	Officially assigned
+VE
+	Officially assigned
+NC
+	Officially assigned
+HN
+	Officially assigned
+BY
+	Officially assigned
+DM
+	Officially assigned
+MG
+	Officially assigned
+GR
+	Officially assigned
+TM
+	Officially assigned
+EE
+	Officially assigned
+VA
+	Officially assigned
+PL
+	Officially assigned
+AD
+	Officially assigned
+LK
+	Officially assigned
+ZW
+	Officially assigned
+MC
+	Officially assigned
+GN
+	Officially assigned
+RU
+	Officially assigned
+CM
+	Officially assigned
+PH
+	Officially assigned
+UZ
+	Officially assigned
+FR
+	Officially assigned
+BQ
+	Officially assigned
+SM
+	Officially assigned
+DE
+	Officially assigned
+MX
+	Officially assigned
+UA
+	Officially assigned
+AU
+	Officially assigned
+CI
+	Officially assigned
+NP
+	Officially assigned
+JO
+	Officially assigned
+DZ
+	Officially assigned
+LC
+	Officially assigned
+BM
+	Officially assigned
+SI
+	Officially assigned
+MT
+	Officially assigned
+IS
+	Officially assigned
+KG
+	Officially assigned
+TZ
+	Officially assigned
+ER
+	Officially assigned
+VN
+	Officially assigned
+GF
+	Officially assigned
+PY
+	Officially assigned
+AQ
+	Officially assigned
+NL
+	Officially assigned
+FJ
+	Officially assigned
+WF
+	Officially assigned
+BI
+	Officially assigned
+SE
+	Officially assigned
+MP
+	Officially assigned
+IO
+	Officially assigned
+CZ
+	Officially assigned
+TV
+	Officially assigned
+GB
+	Officially assigned
+AM
+	Officially assigned
+CA
+	Officially assigned
+LT
+	Officially assigned
+SZ
+	Officially assigned
+BE
+	Officially assigned
+SA
+	Officially assigned
+ML
+	Officially assigned
+GW
+	Officially assigned
+CV
+	Officially assigned
+TR
+	Officially assigned
+AI
+	Officially assigned
+RE
+	Officially assigned
+BZ
+	Officially assigned
+SV
+	Officially assigned
+BA
+	Officially assigned
+MH
+	Officially assigned
+GS
+	Officially assigned
+CR
+	Officially assigned
+TN
+	Officially assigned
+PM
+	Officially assigned
+AE
+	Officially assigned
+WS
+	Officially assigned
+HK
+	Officially assigned
+BV
+	Officially assigned
+SR
+	Officially assigned
+DJ
+	Officially assigned
+KP
+	Officially assigned
+MD
+	Officially assigned
+AZ
+	Officially assigned
+CN
+	Officially assigned
+TJ
+	Officially assigned
+NU
+	Officially assigned
+BR
+	Officially assigned
+SN
+	Officially assigned
+MY
+	Officially assigned
+OM
+	Officially assigned
+QA
+	Officially assigned
+TF
+	Officially assigned
+PE
+	Officially assigned
+JP
+	Officially assigned
+FO
+	Officially assigned
+BN
+	Officially assigned
+SJ
+	Officially assigned
+MU
+	Officially assigned
+IT
+	Officially assigned
+KH
+	Officially assigned
+ES
+	Officially assigned
+GG
+	Officially assigned
+AR
+	Officially assigned
+CF
+	Officially assigned
+LY
+	Officially assigned
+PA
+	Officially assigned
+YT
+	Officially assigned
+US
+	Officially assigned
+FK
+	Officially assigned
+BJ
+	Officially assigned
+MQ
+	Officially assigned
+TW
+	Officially assigned
+LU
+	Officially assigned
+NI
+	Officially assigned
+HT
+	Officially assigned
+BF
+	Officially assigned
+KY
+	Officially assigned
+SB
+	Officially assigned
+MM
+	Officially assigned
+IL
+	Officially assigned
+CW
+	Officially assigned
+VG
+	Officially assigned
+PR
+	Officially assigned
+NE
+	Officially assigned
+DO
+	Officially assigned
+BB
+	Officially assigned
+GT
+	Officially assigned
+TO
+	Officially assigned
+EG
+	Officially assigned
+NZ
+	Officially assigned
+VC
+	Officially assigned
+PN
+	Officially assigned
+AF
+	Officially assigned
+NA
+	Officially assigned
+BW
+	Officially assigned
+SS
+	Officially assigned
+DK
+	Officially assigned
+UG
+	Officially assigned
+ME
+	Officially assigned
+GP
+	Officially assigned
+ID
+	Officially assigned
+RW
+	Officially assigned
+CO
+	Officially assigned
+TK
+	Officially assigned
+EC
+	Officially assigned
+LI
+	Officially assigned
+BS
+	Officially assigned
+SO
+	Officially assigned
+MZ
+	Officially assigned
+KM
+	Officially assigned
+MA
+	Officially assigned
+GL
+	Officially assigned
+AW
+	Officially assigned
+RS
+	Officially assigned
+CK
+	Officially assigned
+TG
+	Officially assigned
+NR
+	Officially assigned
+PF
+	Officially assigned
+BO
+	Officially assigned
+SK
+	Officially assigned
+MV
+	Officially assigned
+KI
+	Officially assigned
+ET
+	Officially assigned
+GH
+	Officially assigned
+AS
+	Officially assigned
+RO
+	Officially assigned
+CG
+	Officially assigned
+TC
+	Officially assigned
+JM
+	Officially assigned
+LA
+	Officially assigned
+SG
+	Officially assigned
+MR
+	Officially assigned
+IQ
+	Officially assigned
+ZM
+	Officially assigned
+KE
+	Officially assigned
+GD
+	Officially assigned
+PW
+	Officially assigned
+AO
+	Officially assigned
+CC
+	Officially assigned
+LV
+	Officially assigned
+HU
+	Officially assigned
+BG
+	Officially assigned
+KZ
+	Officially assigned
+SC
+	Officially assigned
+MN
+	Officially assigned
+GY
+	Officially assigned
+IM
+	Officially assigned
+CX
+	Officially assigned
+TT
+	Officially assigned
+PS
+	Officially assigned
+LR
+	Officially assigned
+NF
+	Officially assigned
+JE
+	Officially assigned
+SX
+	Officially assigned
+GU
+	Officially assigned
+EH
+	Officially assigned
+AG
+	Officially assigned
+HM
+	Officially assigned
+ST
+	Officially assigned
+KR
+	Officially assigned
+MF
+	Officially assigned
+GQ
+	Officially assigned
+IE
+	Officially assigned
+ZA
+	Officially assigned
+------
+English short name
+	Alpha-2 code
+	Status
+TL
+	Officially assigned
+PK
+	Officially assigned
+BT
+	Officially assigned
+YE
+	Officially assigned
+KN
+	Officially assigned
+VU
+	Officially assigned
+GM
+	Officially assigned
+AX
+	Officially assigned
+CL
+	Officially assigned
+TH
+	Officially assigned
+PG
+	Officially assigned
+UY
+	Officially assigned
+SL
+	Officially assigned
+MW
+	Officially assigned
+ZR
+	Transitionally reserved
+BU
+	Transitionally reserved
+NT
+	Transitionally reserved
+AN
+	Transitionally reserved
+CS
+	Transitionally reserved
+YU
+	Transitionally reserved
+TP
+	Transitionally reserved
+OK
+	Unassigned
+IV
+	Unassigned
+KJ
+	Unassigned
+VQ
+	Unassigned
+PZ
+	Unassigned
+HZ
+	Unassigned
+JN
+	Unassigned
+UU
+	Unassigned
+WI
+	Unassigned
+HA
+	Unassigned
+OG
+	Unassigned
+ZN
+	Unassigned
+KF
+	Unassigned
+TY
+	Unassigned
+EQ
+	Unassigned
+VM
+	Unassigned
+PX
+	Unassigned
+LW
+	Unassigned
+NK
+	Unassigned
+YR
+	Unassigned
+JJ
+	Unassigned
+DU
+	Unassigned
+UQ
+	Unassigned
+WE
+	Unassigned
+GZ
+	Unassigned
+OC
+	Unassigned
+ZJ
+	Unassigned
+KB
+	Unassigned
+TU
+	Unassigned
+WZ
+	Unassigned
+YN
+	Unassigned
+JF
+	Unassigned
+DQ
+	Unassigned
+FE
+	Unassigned
+OX
+	Unassigned
+WA
+	Unassigned
+QL
+	Unassigned
+GV
+	Unassigned
+IJ
+	Unassigned
+ZF
+	Unassigned
+TQ
+	Unassigned
+EI
+	Unassigned
+PP
+	Unassigned
+AH
+	Unassigned
+RD
+	Unassigned
+LO
+	Unassigned
+FZ
+	Unassigned
+YJ
+	Unassigned
+JB
+	Unassigned
+UI
+	Unassigned
+FA
+	Unassigned
+OT
+	Unassigned
+QH
+	Unassigned
+KS
+	Unassigned
+VZ
+	Unassigned
+HV
+	Unassigned
+IF
+	Unassigned
+RY
+	Unassigned
+CQ
+	Unassigned
+ZB
+	Unassigned
+NX
+	Unassigned
+JW
+	Unassigned
+FV
+	Unassigned
+WR
+	Unassigned
+HJ
+	Unassigned
+VD
+	Unassigned
+YF
+	Unassigned
+SQ
+	Unassigned
+DI
+	Unassigned
+UE
+	Unassigned
+OP
+	Unassigned
+FQ
+	Unassigned
+QD
+	Unassigned
+KO
+	Unassigned
+VV
+	Unassigned
+AY
+	Unassigned
+TI
+	Unassigned
+JS
+	Unassigned
+LG
+	Unassigned
+WN
+	Unassigned
+HF
+	Unassigned
+YB
+	Unassigned
+OL
+	Unassigned
+IW
+	Unassigned
+ZS
+	Unassigned
+KK
+	Unassigned
+VR
+	Unassigned
+GJ
+	Unassigned
+RQ
+	Unassigned
+TE
+	Unassigned
+PD
+	Unassigned
+YW
+	Unassigned
+UV
+	Unassigned
+FN
+	Unassigned
+WJ
+	Unassigned
+HB
+	Unassigned
+DA
+	Unassigned
+OH
+	Unassigned
+ZO
+	Unassigned
+CE
+	Unassigned
+NQ
+	Unassigned
+LX
+	Unassigned
+HW
+	Unassigned
+YS
+	Unassigned
+JK
+	Unassigned
+DV
+	Unassigned
+UR
+	Unassigned
+OD
+	Unassigned
+PU
+	Unassigned
+ZK
+	Unassigned
+KC
+	Unassigned
+EN
+	Unassigned
+VJ
+	Unassigned
+HS
+	Unassigned
+YO
+	Unassigned
+JG
+	Unassigned
+DR
+	Unassigned
+FF
+	Unassigned
+OY
+	Unassigned
+WB
+	Unassigned
+KX
+	Unassigned
+IK
+	Unassigned
+ZG
+	Unassigned
+EJ
+	Unassigned
+VF
+	Unassigned
+PQ
+	Unassigned
+LP
+	Unassigned
+ND
+	Unassigned
+WW
+	Unassigned
+HO
+	Unassigned
+YK
+	Unassigned
+JC
+	Unassigned
+DN
+	Unassigned
+UJ
+	Unassigned
+FB
+	Unassigned
+OU
+	Unassigned
+QI
+	Unassigned
+KT
+	Unassigned
+IG
+	Unassigned
+RZ
+	Unassigned
+ZC
+	Unassigned
+NY
+	Unassigned
+VB
+	Unassigned
+JX
+	Unassigned
+LL
+	Unassigned
+FW
+	Unassigned
+PC
+	Unassigned
+YG
+	Unassigned
+UF
+	Unassigned
+OQ
+	Unassigned
+QE
+	Unassigned
+ZX
+	Unassigned
+VW
+	Unassigned
+GO
+	Unassigned
+RV
+	Unassigned
+EB
+	Unassigned
+LH
+	Unassigned
+FS
+	Unassigned
+HG
+	Unassigned
+YC
+	Unassigned
+DF
+	Unassigned
+UB
+	Unassigned
+IX
+	Unassigned
+ZT
+	Unassigned
+KL
+	Unassigned
+VS
+	Unassigned
+GK
+	Unassigned
+AV
+	Unassigned
+RR
+	Unassigned
+CJ
+	Unassigned
+YX
+	Unassigned
+LD
+	Unassigned
+UW
+	Unassigned
+HC
+	Unassigned
+DB
+	Unassigned
+OI
+	Unassigned
+ZP
+	Unassigned
+VO
+	Unassigned
+TB
+	Unassigned
+NM
+	Unassigned
+HX
+	Unassigned
+JL
+	Unassigned
+DW
+	Unassigned
+OE
+	Unassigned
+JT
+	Unassigned
+IP
+	Unassigned
+ZL
+	Unassigned
+KD
+	Unassigned
+EO
+	Unassigned
+VK
+	Unassigned
+PV
+	Unassigned
+RJ
+	Unassigned
+CB
+	Unassigned
+YP
+	Unassigned
+JH
+	Unassigned
+DS
+	Unassigned
+UO
+	Unassigned
+FG
+	Unassigned
+OZ
+	Unassigned
+WC
+	Unassigned
+YD
+	Unassigned
+CT
+	Unassigned
+GX
+	Unassigned
+ZH
+	Unassigned
+TS
+	Unassigned
+EK
+	Unassigned
+AJ
+	Unassigned
+RF
+	Unassigned
+LQ
+	Unassigned
+WX
+	Unassigned
+HP
+	Unassigned
+YL
+	Unassigned
+JD
+	Unassigned
+SW
+	Unassigned
+FC
+	Unassigned
+OV
+	Unassigned
+QJ
+	Unassigned
+KU
+	Unassigned
+IH
+	Unassigned
+MI
+	Unassigned
+ZD
+	Unassigned
+JY
+	Unassigned
+LM
+	Unassigned
+WT
+	Unassigned
+HL
+	Unassigned
+YH
+	Unassigned
+OR
+	Unassigned
+QF
+	Unassigned
+ZY
+	Unassigned
+KQ
+	Unassigned
+VX
+	Unassigned
+NV
+	Unassigned
+PJ
+	Unassigned
+AB
+	Unassigned
+JU
+	Unassigned
+FT
+	Unassigned
+WP
+	Unassigned
+HH
+	Unassigned
+UC
+	Unassigned
+DD
+	Unassigned
+ON
+	Unassigned
+IY
+	Unassigned
+QB
+	Unassigned
+ZU
+	Unassigned
+EX
+	Unassigned
+VT
+	Unassigned
+YY
+	Unassigned
+JQ
+	Unassigned
+LE
+	Unassigned
+UX
+	Unassigned
+FP
+	Unassigned
+HD
+	Unassigned
+DC
+	Unassigned
+OJ
+	Unassigned
+IU
+	Unassigned
+ZQ
+	Unassigned
+VP
+	Unassigned
+LZ
+	Unassigned
+NN
+	Unassigned
+HY
+	Unassigned
+PB
+	Unassigned
+DX
+	Unassigned
+UT
+	Unassigned
+WH
+	Unassigned
+BK
+	Unassigned
+OF
+	Unassigned
+TX
+	Unassigned
+VL
+	Unassigned
+RK
+	Unassigned
+NJ
+	Unassigned
+YQ
+	Unassigned
+JI
+	Unassigned
+DT
+	Unassigned
+UP
+	Unassigned
+FH
+	Unassigned
+WD
+	Unassigned
+OB
+	Unassigned
+NH
+	Unassigned
+ZI
+	Unassigned
+------
+English short name
+	Alpha-2 code
+	Status
+KA
+	Unassigned
+EL
+	Unassigned
+VH
+	Unassigned
+AK
+	Unassigned
+RG
+	Unassigned
+WY
+	Unassigned
+HQ
+	Unassigned
+YM
+	Unassigned
+DP
+	Unassigned
+UL
+	Unassigned
+FD
+	Unassigned
+OW
+	Unassigned
+QK
+	Unassigned
+BC
+	Unassigned
+KV
+	Unassigned
+MJ
+	Unassigned
+II
+	Unassigned
+ZE
+	Unassigned
+PO
+	Unassigned
+WK
+	Unassigned
+JZ
+	Unassigned
+LN
+	Unassigned
+FY
+	Unassigned
+NB
+	Unassigned
+WU
+	Unassigned
+YI
+	Unassigned
+DL
+	Unassigned
+UH
+	Unassigned
+OS
+	Unassigned
+QG
+	Unassigned
+VY
+	Unassigned
+RX
+	Unassigned
+ED
+	Unassigned
+NW
+	Unassigned
+JV
+	Unassigned
+LJ
+	Unassigned
+FU
+	Unassigned
+WQ
+	Unassigned
+HI
+	Unassigned
+SP
+	Unassigned
+DH
+	Unassigned
+UD
+	Unassigned
+OO
+	Unassigned
+IZ
+	Unassigned
+QC
+	Unassigned
+ZV
+	Unassigned
+EY
+	Unassigned
+MB
+	Unassigned
+IA
+	Unassigned
+RT
+	Unassigned
+NS
+	Unassigned
+YZ
+	Unassigned
+JR
+	Unassigned
+WM
+	Unassigned
+HE
+	Unassigned
+BP
+	Unassigned
+YA
+	Unassigned
+#------!
