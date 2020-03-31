@@ -27,11 +27,6 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 """
 
 # ToDo: Clean up the many searchers, what's supposed to be the difference between guess() and find()
-# ToDo: Consider:
-""" EmployeeRecord = namedtuple('EmployeeRecord', 'name, age, title, department, paygrade')
-    import csv
-    for emp in map(EmployeeRecord._make, csv.reader(open("employees.csv", "rb"))):
-        print(emp.name, emp.title)"""
 #   Idea: All will: Always search ISO 3166 first, but
 #   function name x(), .returns, [] returns etc
 #       - First and foremost, tries to be compatible with iso3166
@@ -39,7 +34,7 @@ only make sure the 1'st column is an ID that is all ready known, e.g. Alpha-2
 #       - Never return multiple hits (that would't be a guess, would it?)
 #   find():
 #       - Allow for multiple returns, somehow... always return list, to minimise confusion.
-#       - Allow search to target specific keys, e.g. 'capital' = 'Rome'
+#       - Allow search to target specific keys, e.g. find('Rome', cat=['capital'])
 # ToDo: Make search by number (as int) work
 # ToDo: Write Test Class :-)
 # ToDo: Consider exploring one or more of the following:
@@ -93,7 +88,7 @@ def order_iso3166_keys(lst_keys):
                 lst_keys.insert(0, lst_keys.pop(lst_keys.index(key_iso)))  # move to front of list
         return lst_keys
     else:
-        return lst_keys  # if it's not a list, just return it untouched...
+        return lst_keys  # if it's not a list, just return it untouched...  ToDo: When is this a good idea?
 
 
 class Territory:
@@ -357,6 +352,7 @@ class Territories:
         """ Allows for multiple returns, therefore always return a list.
         If no match is found for token it returns an empty list.
         Allow for categories ...
+        ToDo: Always search ISO 3166 first ... that's a bitch!
         ToDo: Find a better word for categories
         :param token: str: The phrase to look for
         :param categories: tuple or list: If non-empty, limit the search to these fields
